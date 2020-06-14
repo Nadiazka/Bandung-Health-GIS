@@ -1,0 +1,20 @@
+
+{% load class_name %}
+
+<!DOCTYPE html>
+{% load custom_filter %}
+<html>
+<head>
+	<title>testdatav1</title>
+</head>
+<body>
+	<h1>Ini pasien</h1>
+	{% for i in objPasien %}
+		<p>"{{ i.kat_pasien }}", "{{ i.umur }}", "{{ i.jenis_kelamin }}" </p><br>
+	{% endfor %}
+	<p>{{ objPasien.kat_pasien }}</p>
+
+	<h1><strong>Cobain filter</strong></h1>
+	{{ objKasus.filterWilayah('Puskesmas Dago') }}
+</body>
+</html>

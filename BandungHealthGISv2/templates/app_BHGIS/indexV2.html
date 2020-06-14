@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+{% load static %}
+{% load json_tag %}
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script>
+   		L_NO_TOUCH = false;
+    	L_DISABLE_3D = false;
+	</script>
+
+    <title>indexV2</title>
+
+    <!-- LEAFLET -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="{% static "css/mapStylesV1.css" %}" />
+    <style>html, body {width: 100%;height: 100%;margin: 0;padding: 0;}</style>
+    <style>#map {position:absolute;top:0;bottom:0;right:0;left:0;}</style>
+
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #petabandung {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+
+                .info { padding: 6px 8px; font: 10px/12px Arial, Helvetica, sans-serif; background: white; background: rgba(255,255,255,0.8); box-shadow: 0 0 15px rgba(0,0,0,0.2); border-radius: 5px; } .info h4 { margin: 0 0 5px; color: #777; }
+                .legend { text-align: left; line-height: 18px; color: #555; } .legend i { width: 30px; height: 10px; float: left; margin-right: 8px; opacity: 0.7; }
+                
+                #submit{
+                  position: relative;
+                  left: 25%;
+                }
+            </style>
+
+    <!-- MAIN -->
+	<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"/>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"/>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="{% static "css/stylesV1.css" %}"/>
+
+	<!-- Chart -->
+	<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+
+	<!-- Slide Page -->
+	<script>
+	$(document).ready(function(){
+      $("#diagramBlok").hide()
+  		$(".btn1").click(function(){
+        $("#diagramBlok").show()
+        $("#content").slideUp("slow");
+  		});
+  		$(".btn2").click(function(){
+        $("#content").slideDown("slow");
+        $("#diagramBlok").hide()
+  		});
+	});
+	</script>
+
+</head>
+
+<body>
+<div class="wrapper">
+  <nav class="navbar navbar-expand-lg bg-info navbar-dark">  
+    <a class="navbar-brand hidden-md-down" href="#">BANDUNG HEALTH GEOGRAPHICAL INFORMATION SYSTEM</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <div class="navbar-nav ml-auto">
+        <!-- Analisis -->
+        <button type = "button" class="btn1 btn btn-info">Open Analysis</button>
+        
+        <!-- Button to Open the Modal -->
+        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">Help</button>
+        <!-- The Modal -->
+        <div class="modal fade" id="myModal">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <!-- Modal body -->
+              <div class="modal-body">
+                Beri imbuhan "Puskesmas" untuk penulisan wilayah kerja puskesmas
+              </div>
+              <!-- Modal footer -->
+              <div class="modal-footer">
+                <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        
+        <!-- Input Data LB-1 -->
+        <button type="button" class="btn btn-info" id="buttonLB1" data-toggle="modal" data-target="#modalLB1Form">Input LB-1</button>
+          <div class="modal fade" id="modalLB1Form" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+          aria-hidden="true">
+          <div class="modal-dialog" role="document">
+
+            <div class="modal-content">
+              <div class="modal-header text-center">
+                <h4 class="modal-title w-100 font-weight-bold">Input LB-1</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+
+              <div class="modal-body mx-3">
+                <form id='inputLB1' method="POST" enctype="multipart/form-data">
+                   {% csrf_token %}
+                   
+                    <div class="md-form mb-4">
+                      <input type="file" id="LB1File" name="LB1File">
+                    </div>
+          
+                  <div class="modal-footer d-flex justify-content-center">
+                    <button class="btn btn-info btn-sm" id="SubmitLB1">Submit</button>
+                  </div>
+                </form>
+                <script type="text/javascript">
+                  $(document).ready(function(){
+                      $("#inputLB1").submit(function(){
+                           alert('submited');
+                           $(window).on('load', function() {
+                                $.get("index/", function(data){
+                                  alert("File telah terupload di:\n" + data.urlFile)
+                                })
+                            });
+                         });
+                  });
+                </script>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Admin -->
+        <a class="btn btn-info" href="{% url 'admin:index' %}">Admin</a>
+
+        <!-- Account -->
+        <div class="dropdown">
+          <button type="button" class="btn dropdown-toggle btn-info" data-toggle="dropdown">{{ request.user }}</button>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="{% url 'editProfile' %}">Settings</a>
+            <a class="dropdown-item" href="{% url 'logout' %}">Log out</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+<!-- Main Content -->
+<div class="container-fluid" id="content">
+  <div class="row" style="height: 600px">
+    <div class="col-sm-2 bg-dark text-white scrollbar scrollbar-info" style="height: 600px">
+      <div>
+        <h5><strong><u>Filter Option</u></strong></h5>
+      </div>
+      <form id='filter' method="GET">
+        {%csrf_token%}
+        <ul class="list-group list-group-flush">
+          <!-- Filter Penyakit -->
+          <li class="list-group-item list-group-item-dark">Penyakit:
+            <div class="autocomplete" style="width:100%;">
+              <input id="InputPnykt" type="text" name="Penyakit" placeholder="Penyakit" value="Semua Penyakit" class="form-control form-control-sm">
+            </div>
+          </li>
+          <!-- Filter Jenis Kelamin -->
+          <li class="list-group-item list-group-item-dark">Jenis Kelamin:
+            <select class="form-control form-control-sm" name="JenisKelamin" id="InputGender">
+              <option>Semua Jenis</option>
+              <option>Laki-laki</option>
+              <option>Perempuan</option>
+            </select>
+          </li>
+          <!-- Filter Umur -->
+          <li class="list-group-item list-group-item-dark">Umur:
+            <div class="col-sm-14">
+              <select class="form-control form-control-sm" name="Umur" id="InputUmur">
+                <option>Semua Umur</option>
+                <option>0-7hr</option>
+                <option>8-28hr</option>
+                <option>1bl-<1th</option>
+                <option>1-4th</option>
+                <option>5-9th</option>
+                <option>10-14th</option>
+                <option>20-44th</option>
+                <option>45-54th</option>
+                <option>55-59th</option>
+                <option>>70th</option>
+              </select>
+            </div>
+          </li>
+          <!-- Filter Periode -->
+          <li class="list-group-item list-group-item-dark">Periode:
+            <div class="form-group">
+              <input type="date" name="dateStart" class="form-control form-control-sm" id="dateStart">s/d
+              <input type="date" name="dateEnd" class="form-control form-control-sm" id="dateEnd">
+            </div>
+          </li>
+          <!-- Filter Jenis Kasus -->
+          <li class="list-group-item list-group-item-dark">Jenis Kasus:
+            <select class="form-control form-control-sm" name="JenisKasus" id="InputJenisKasus">
+              <option>Semua Jenis</option>
+              <option>Kasus Lama</option>
+              <option>Kasus Baru</option>
+            </select>
+          </li>
+        </ul>
+        <input type="submit" class="btn btn-sm btn-outline-info" id="submit">
+      </form> <br>
+      <script type="text/javascript">
+        var areaPkm = {{areaPkm|json}}
+        console.log(areaPkm)
+        var areaKec = {{areaKec|json}}
+        console.log(areaKec)
+        var statPkm = {{statPkm|json}}
+        console.log(statPkm)
+        var statKec = {{statKec|json}}
+        console.log(statKec)
+        var chartPkm = {{chartPkm|json}}
+        console.log(chartPkm)
+        var chartKec = {{chartKec|json}}
+        console.log(chartKec)
+        var chartPenyakit = {{chartPenyakit|json}}
+        console.log(chartPenyakit)
+        var chartGender = {{chartGender|json}}
+        console.log(chartGender)
+        var chartUmur = {{chartUmur|json}}
+        console.log(chartUmur)
+        var chartPeriode = {{chartPeriode|json}}
+        console.log(chartPeriode)
+      </script>
+    </div>
+    <!-- Peta -->
+    <div class="col-sm-10 bg-dark">
+      <div id="map" ></div>
+    </div>
+  </div>
+</div>
+
+<!-- Diagram -->
+<div class="container-fluid bg-dark" id="diagramBlok">
+      <div class="row">
+        <div class="col-md-6" style="height=5px;">
+          <canvas id="ChartPkm"></canvas>
+        </div>
+        <div class="col-md-6" style="height=5px;">
+          <canvas id="ChartKec"></canvas>
+        </div>
+        <div class="col-md-6" style="height=5px;">
+          <canvas id="ChartPenyakit"></canvas>
+        </div><br>
+        <div class="col-md-6" style="height=5px;">
+          <canvas id="ChartGender"></canvas>
+        </div>
+        <div class="col-md-6" style="height=5px;">
+          <canvas id="ChartUmur"></canvas>
+        </div>
+        <div class="col-md-6" style="height=5px;">
+          <canvas id="ChartPeriode"></canvas>
+        </div>
+        <div class="col-md-6" id="closeAnalisisBtn">
+          <button class="btn2 btn-info">Close Analysis</button>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="{% static "js/autocomplete.js" %}"></script>
+<!--<script type="text/javascript" src="{% static "js/BHGIS.js" %}"></script>-->
+<script type="text/javascript" src="{% static "js/map.js" %}"></script>
+<script type="text/javascript" src="{% static "js/diagram.js" %}"></script>
+<!--<script type="text/javascript" src="{% static "js/inputLB1.js" %}"></script>-->
+<!--
+<script type="text/javascript">
+  //Diagram Puskesmas
+var ctx = document.getElementById("ChartPkm").getContext('2d');
+chartPkmLabel = [];
+chartPkmData = [];
+for (var i = 0; i < chartPkm.length; i++) {
+    chartPkmLabel[i] = chartPkm[i].kode__kode_pkm__nama_pkm;
+    chartPkmData[i]=chartPkm[i].kasus
+  };
+var myChart2 = new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels:chartPkmLabel ,
+    datasets: [{
+      label: 'Kasus',
+      data: chartPkmData,
+      backgroundColor: 'rgba(54, 162, 235, 0.2)',
+      borderColor: 'rgba(54, 162, 235, 1)', 
+      borderWidth: 1
+      }]
+    },
+  options: {
+    responsive : true,
+    legend: {
+        position: 'bottom',
+      },
+    title: {
+      display: true,
+      text: 'Top 10 Puskesmas'
+    },
+    scales: {
+      yAxes: [{
+        ticks: {
+        beginAtZero: true
+        }
+      }]
+    }
+  }
+});
+
+//Diagram Kecamatan
+var ctx = document.getElementById("ChartKec").getContext('2d');
+chartKecLabel = [];
+chartKecData = [];
+for (var i = 0; i < chartKec.length; i++) {
+    chartKecLabel[i] = chartKec[i].kode__kode_pkm__kode_kec__nama_kec;
+    chartKecData[i]=chartKec[i].kasus
+  };
+var myChart2 = new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: chartKecLabel,
+    datasets: [{
+      label: 'Kasus',
+      data: chartKecData,
+      backgroundColor: 'rgba(75, 192, 192, 0.2)',
+      borderColor: 'rgba(75, 192, 192, 1)', 
+      borderWidth: 1
+      }]
+    },
+  options: {
+    responsive : true,
+    legend: {
+        position: 'bottom',
+      },
+    title: {
+      display: true,
+      text: 'Top 10 Kecamatan'
+    },
+    scales: {
+      yAxes: [{
+        ticks: {
+        beginAtZero: true
+        }
+      }]
+    }
+  }
+});
+
+//Penyakit
+var cPnykt = document.getElementById("ChartPenyakit").getContext('2d');
+chartPenyakitLabel = [];
+chartPenyakitData = [];
+for (var i = 0; i < chartPenyakit.length; i++) {
+    chartPenyakitLabel[i] = chartPenyakit[i].kat__nama_kat;
+    chartPenyakitData[i]=chartPenyakit[i].kasus
+  };
+var myChartPnykt = new Chart(cPnykt, {
+  type: 'bar',
+  data: {
+    labels: chartPenyakitLabel,
+    datasets: [{
+      label: 'Kasus',
+      data: chartPenyakitData,
+      backgroundColor: 'rgba(54, 162, 235, 0.2)',
+      borderColor: 'rgba(54, 162, 235, 1)', 
+      borderWidth: 1
+      }]
+    },
+  options: {
+    responsive : true,
+    legend: {
+        position: 'bottom',
+      },
+    title: {
+      display: true,
+      text: 'Diagram Penyakit'
+    },
+    scales: {
+      yAxes: [{
+        ticks: {
+        beginAtZero: true
+        }
+      }]
+    }
+  }
+}); 
+
+//Diagram Jenis Kelamin
+var ctx = document.getElementById("ChartGender").getContext('2d');
+chartGenderLabel = [];
+chartGenderData = [];
+for (var i = 0; i < chartGender.length; i++) {
+    chartGenderLabel[i] = chartGender[i].kat_pasien__jenis_kelamin;
+    chartGenderData[i]=chartGender[i].kasus
+  };
+var myChart2 = new Chart(ctx, {
+  type: 'pie',
+  data: {
+    labels: chartGenderLabel,
+    datasets: [{
+      label: 'Kasus',
+      data: chartGenderData,
+      backgroundColor: ['rgba(153, 102, 255, 0.2)', 'rgba(255, 99, 132, 0.2)'],
+      borderColor: ['rgba(153, 102, 255, 1)', 'rgba(255,99,132,1)'], 
+      borderWidth: 1
+      }]
+    },
+  options: {
+    responsive : true,
+    legend: {
+        position: 'bottom',
+      },
+    title: {
+      display: true,
+      text: 'Gender Persentase'
+    }
+  }
+})
+
+//Diagram Umur
+var ctx = document.getElementById("ChartUmur").getContext('2d');
+chartUmurLabel = [];
+chartUmurData = [];
+for (var i = 0; i < chartUmur.length; i++) {
+    chartUmurLabel[i] = chartUmur[i].kat_pasien__umur;
+    chartUmurData[i]=chartUmur[i].kasus
+  };
+var myChart2 = new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: chartUmurLabel,
+    datasets: [{
+      label: 'Kasus',
+      data: chartUmurData,
+      backgroundColor: 'rgba(255, 206, 86, 0.2)',
+      borderColor: 'rgba(255, 206, 86, 1)', 
+      borderWidth: 1
+      }]
+    },
+  options: {
+    responsive : true,
+    legend: {
+        position: 'bottom',
+      },
+    title: {
+      display: true,
+      text: 'Diagram Umur'
+    },
+    scales: {
+      yAxes: [{
+        ticks: {
+        beginAtZero: true
+        }
+      }]
+    }
+  }
+})
+
+//Diagram Periode
+var ctx = document.getElementById("ChartPeriode").getContext('2d');
+chartPeriodeLabel = [];
+chartPeriodeData = [];
+for (var i = 0; i < chartPeriode.length; i++) {
+    chartPeriodeLabel[i] = chartPeriode[i].kode__tanggal;
+    chartPeriodeData[i]=chartPeriode[i].kasus
+  };
+var myChart2 = new Chart(ctx, {
+  type: 'line',
+  data: {
+    labels: chartPeriodeLabel,
+    datasets: [{
+      label: 'Kasus',
+      data: chartPeriodeData,
+      backgroundColor: 'rgba(255, 159, 64, 0.2)',
+      borderColor: 'rgba(255, 159, 64, 1)', 
+      borderWidth: 1
+      }]
+    },
+  options: {
+    responsive : true,
+    legend: {
+        position: 'bottom',
+      },
+    title: {
+      display: true,
+      text: 'Grafik Periode'
+    },
+    scales: {
+      yAxes: [{
+        ticks: {
+        beginAtZero: true
+        }
+      }]
+    }
+  }
+})
+
+</script>
+-->
+</body>
+</html>
