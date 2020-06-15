@@ -52,10 +52,9 @@ def index(request):
 			start_row=3, 
 			row_limit=1
 			)
-		list_pkmCode = list(arr_pkmCode.items())
-		val_pkmCode = list_pkmCode[0][1][0][0]
-		print(val_pkmCode)
-		split_pkmCode = val_pkmCode.split(" ")
+		list_pkmCode = list(arr_pkmCode.items())[0][1][0][0]
+		print(list_pkmCode)
+		split_pkmCode = list_pkmCode.split(" ")
 		pkmCode = split_pkmCode[0]
 		print(pkmCode)
 
@@ -66,10 +65,9 @@ def index(request):
 			start_row=4, 
 			row_limit=1
 			)
-		list_date = list(arr_date.items())
-		val_date = list_date[0][1][0][0]
-		print(val_date)
-		split_date = val_date.split(" ")
+		list_date = list(arr_date.items())[0][1][0][0]
+		print(list_date)
+		split_date = list_date.split(" ")
 		str_date = split_date[0]
 		date = datetime.strptime(str_date, '%d-%m-%Y').date()
 		print(date)
@@ -79,13 +77,10 @@ def index(request):
 			print("create new indeks")
 			Indeks.objects.create(
 				kode_pkm = Puskesmas.objects.get(kode_pkm=pkmCode),
-				tanggal = date,
-				deleted = 0
+				tanggal = date
 				)
 
-		qs_code = Indeks.objects.filter(kode_pkm=pkmCode, tanggal=date).values('kode')
-		print(qs_code)
-		code = qs_code[0]['kode'] 
+		code = Indeks.objects.filter(kode_pkm=pkmCode, tanggal=date).values('kode')[0]['kode']
 		print(code)
 
 		#Get list penyakit
@@ -96,8 +91,7 @@ def index(request):
 			start_row=14,
 			skip_empty_rows=True
 			)
-		list_diseases = list(obj_diseases.items())
-		diseases = list_diseases[0][1]
+		diseases = list(obj_diseases.items())[0][1]
 
 		#Get matriks kasus
 		obj_case = xls_get(
@@ -107,85 +101,79 @@ def index(request):
 			start_row=14,
 			skip_empty_rows=True
 			)
-		list_case = list(obj_case.items())
-		case = list_case[0][1]
-
-		#Get gakin
-		obj_gakin = xls_get(
+		case = list(obj_case.items())[0][1]
+		
+		#Get jumlah kasus
+		obj_jumlahKasus = xls_get(
 			file,
-			start_column=56, 
-			column_limit=1,
+			start_column=51, 
+			column_limit=6,
 			start_row=14,
 			skip_empty_rows=True
 			)
-		gakin = list(obj_gakin.items())[0][1]
+		sumCase = list(obj_jumlahKasus.items())[0][1]
 
 		#Add data in database
-		if (Kasus.objects.filter(kode=code).exists()==False) and (Jumlah_Kategori.objects.filter(kode=code).exists()==False):
+		if (Jumlah_Chapter.objects.filter(kode=code).exists()==False):
 
 			for idx, disease in enumerate(diseases, start=0):
 				print(idx)
 				print(disease[0])
+
+				if "." in disease[0]:
+					subkat = disease[0]
+					kat = ICD10_Subkategori.objects.filter(subkat=subkat).values("kat")[0]['kat']
+				else :
+					kat = disease[0]
+
+				subch = ICD10_Kategori.objects.filter(kat=kat).values("subchapter")[0]['subchapter']
+				ch = ICD10_Subchapter.objects.filter(subchapter=subch).values("chapter")[0]['chapter']
+
+				print(kat)
+				print(subch)
+				print(ch)
+
 				j=0
 				for i in range(24):
 					i += 1
 					k = i+j-1
 					
-					
-					if ICD10_Kategori.objects.filter(kat=disease[0]).exists() :
-						print("database kategori")
-						kat = disease[0]
-						Jumlah_Kategori.objects.create(
-							kode = Indeks.objects.get(kode=code),
-							kat_pasien = Pasien.objects.get(kat_pasien=i),
-							kat = ICD10_Kategori.objects.get(kat=kat),
-							jumlah_kat_baru = case[idx][k],
-							jumlah_kat_lama = case[idx][k+2],
-							jumlah_kat = case[idx][k] + case[idx][k+2]
-							)					
-					elif ICD10_Subkategori.objects.filter(subkat=disease[0]).exists():
-						print("database subkat")
+					if "." in disease[0]:
 						Kasus.objects.create(
 							kode = Indeks.objects.get(kode=code),
-							icd_10 = ICD10_Subkategori.objects.get(subkat=disease[0]),
+							icd_10 = ICD10_Subkategori.objects.get(subkat=subkat),
 							kat_pasien = Pasien.objects.get(kat_pasien=i),
 							kasus_baru = case[idx][k],
-							kasus_lama = case[idx][k+2]
+							kasus_lama = case[idx][k+2],
+							jumlah = case[idx][k]+case[idx][k+2]
 							)
-						kat = ICD10_Subkategori.objects.filter(subkat=disease[0]).values("kat")[0]['kat']
-						print (kat)
 
-						if Jumlah_Kategori.objects.filter(kode=code, kat_pasien=i, kat=kat).exists():
-							print("update kat")
-							Jumlah_Kategori.objects.filter(kode=code, kat_pasien=i, kat=kat)\
-							.update(
-								jumlah_kat_baru=F('jumlah_kat_baru') + case[idx][k],
-								jumlah_kat_lama=F('jumlah_kat_lama') + case[idx][k+2],
-								jumlah_kat = F('jumlah_kat') +case[idx][k] + case[idx][k+2]
-								)
-						else:
-							print("create new kat")
-							Jumlah_Kategori.objects.create(
-							kode = Indeks.objects.get(kode=code),
-							kat_pasien = Pasien.objects.get(kat_pasien=i),
-							kat = ICD10_Kategori.objects.get(kat=kat),
-							jumlah_kat_baru = case[idx][k],
-							jumlah_kat_lama = case[idx][k+2],
-							jumlah_kat = case[idx][k] + case[idx][k+2]
+					if Jumlah_Kategori.objects.filter(kode=code, kat_pasien=i, kat=kat).exists():
+						print("update kat")
+						Jumlah_Kategori.objects.filter(kode=code, kat_pasien=i, kat=kat)\
+						.update(
+							kasus_baru=F('kasus_baru') + case[idx][k],
+							kasus_lama=F('kasus_lama') + case[idx][k+2],
+							jumlah = F('jumlah') + case[idx][k] + case[idx][k+2]
 							)
-						
-					subch = ICD10_Kategori.objects.filter(kat=kat).values("subchapter")[0]['subchapter']
-					ch = ICD10_Subchapter.objects.filter(subchapter=subch).values("chapter")[0]['chapter']
-					print(subch)
-					print(ch)
+					else :
+						print("create new kat")
+						Jumlah_Kategori.objects.create(
+						kode = Indeks.objects.get(kode=code),
+						kat_pasien = Pasien.objects.get(kat_pasien=i),
+						kat = ICD10_Kategori.objects.get(kat=kat),
+						kasus_baru = case[idx][k],
+						kasus_lama = case[idx][k+2],
+						jumlah = case[idx][k] + case[idx][k+2]
+						)
 
 					if Jumlah_Subchapter.objects.filter(kode=code, kat_pasien=i, subchapter=subch).exists():
 						print("update subchapter")
 						Jumlah_Subchapter.objects.filter(kode=code, kat_pasien=i, subchapter=subch)\
 						.update(
-							jumlah_subchapter_baru=F('jumlah_subchapter_baru') + case[idx][k],
-							jumlah_subchapter_lama=F('jumlah_subchapter_lama') + case[idx][k+2],
-							jumlah_subchapter = F('jumlah_subchapter') +case[idx][k] + case[idx][k+2]
+							kasus_baru=F('kasus_baru') + case[idx][k],
+							kasus_lama=F('kasus_lama') + case[idx][k+2],
+							jumlah = F('jumlah') +case[idx][k] + case[idx][k+2]
 							)
 					else:
 						print("create new subchapter")
@@ -193,18 +181,18 @@ def index(request):
 						kode = Indeks.objects.get(kode=code),
 						subchapter = ICD10_Subchapter.objects.get(subchapter=subch),
 						kat_pasien = Pasien.objects.get(kat_pasien=i),
-						jumlah_subchapter_baru = case[idx][k],
-						jumlah_subchapter_lama = case[idx][k+2],
-						jumlah_subchapter = case[idx][k] + case[idx][k+2]
+						kasus_baru = case[idx][k],
+						kasus_lama = case[idx][k+2],
+						jumlah = case[idx][k] + case[idx][k+2]
 						)
 
 					if Jumlah_Chapter.objects.filter(kode=code, kat_pasien=i, chapter=ch).exists():
 						print("update chapter")
 						Jumlah_Chapter.objects.filter(kode=code, kat_pasien=i, chapter=ch)\
 						.update(
-							jumlah_chapter_baru=F('jumlah_chapter_baru') + case[idx][k],
-							jumlah_chapter_lama=F('jumlah_chapter_lama') + case[idx][k+2],
-							jumlah_chapter = F('jumlah_chapter') +case[idx][k] + case[idx][k+2]
+							kasus_baru=F('kasus_baru') + case[idx][k],
+							kasus_lama=F('kasus_lama') + case[idx][k+2],
+							jumlah = F('jumlah') +case[idx][k] + case[idx][k+2]
 							)
 					else:
 						print("create new chapter")
@@ -212,101 +200,54 @@ def index(request):
 						kode = Indeks.objects.get(kode=code),
 						chapter = ICD10_Chapter.objects.get(chapter=ch),
 						kat_pasien = Pasien.objects.get(kat_pasien=i),
-						jumlah_chapter_baru = case[idx][k],
-						jumlah_chapter_lama = case[idx][k+2],
-						jumlah_chapter = case[idx][k] + case[idx][k+2]
+						kasus_baru = case[idx][k],
+						kasus_lama = case[idx][k+2],
+						jumlah = case[idx][k] + case[idx][k+2]
 						)
 
 					if i%2 == 0 :
 						j += 2
 
-				if ICD10_Kategori.objects.filter(kat=disease[0]).exists() :
-					qs_jkkbl = Jumlah_Kategori.objects\
-					.filter(kode=code, kat=disease[0] ,kat_pasien__jenis_kelamin="laki-laki")\
-					.aggregate(kasus = Sum('jumlah_kat_baru'))
-					jkkbl = qs_jkkbl['kasus']
-					qs_jkkbp = Jumlah_Kategori.objects\
-					.filter(kode=code, kat=disease[0] ,kat_pasien__jenis_kelamin="perempuan")\
-					.aggregate(kasus = Sum('jumlah_kat_baru'))
-					jkkbp = qs_jkkbp['kasus']
-					qs_jkkll = Jumlah_Kategori.objects\
-					.filter(kode=code, kat=disease[0] ,kat_pasien__jenis_kelamin="laki-laki")\
-					.aggregate(kasus = Sum('jumlah_kat_lama'))
-					jkkll = qs_jkkll['kasus']
-					qs_jkklp = Jumlah_Kategori.objects\
-					.filter(kode=code, kat=disease[0] ,kat_pasien__jenis_kelamin="perempuan")\
-					.aggregate(kasus = Sum('jumlah_kat_lama'))
-					jkklp = qs_jkklp['kasus']
-
-					print("Jumlah_Kasus_Kat")
-					Jumlah_Kasus_Kat.objects.create(
-						kode = Indeks.objects.get(kode=code),
-						kat = ICD10_Kategori.objects.get(kat=disease[0]),
-						jumlah_baru_l = jkkbl,
-						jumlah_baru_p = jkkbp,
-						jumlah_lama_l = jkkll,
-						jumlah_lama_p = jkklp,
-						jumlah = jkkbl + jkkbp + jkkll + jkklp,
-						gakin = gakin[idx][0]
-						)
-
-				elif ICD10_Subkategori.objects.filter(subkat=disease[0]).exists():	
-					qs_jksbl = Kasus.objects\
-					.filter(kode=code, icd_10=disease[0] ,kat_pasien__jenis_kelamin="laki-laki")\
-					.aggregate(kasus = Sum('kasus_baru'))
-					jksbl = qs_jksbl['kasus']
-					qs_jksbp = Kasus.objects\
-					.filter(kode=code, icd_10=disease[0] ,kat_pasien__jenis_kelamin="perempuan")\
-					.aggregate(kasus = Sum('kasus_baru'))
-					jksbp = qs_jksbp['kasus']
-					qs_jksll = Kasus.objects\
-					.filter(kode=code, icd_10=disease[0] ,kat_pasien__jenis_kelamin="laki-laki")\
-					.aggregate(kasus = Sum('kasus_lama'))
-					jksll = qs_jksll['kasus']
-					qs_jkslp = Kasus.objects\
-					.filter(kode=code, icd_10=disease[0] ,kat_pasien__jenis_kelamin="perempuan")\
-					.aggregate(kasus = Sum('kasus_lama'))
-					jkslp = qs_jkslp['kasus']
-
+				if "." in disease[0]:
 					print("create Jumlah_Kasus_Subkat")
 					Jumlah_Kasus_Subkat.objects.create(
 						kode = Indeks.objects.get(kode=code),
-						icd_10 = ICD10_Subkategori.objects.get(subkat=disease[0]),
-						jumlah_baru_l = jksbl,
-						jumlah_baru_p = jksbp,
-						jumlah_lama_l = jksll,
-						jumlah_lama_p = jkslp,
-						jumlah = jksbl + jksbp + jksll + jkslp,
-						gakin = gakin[idx][0]
+						icd_10 = ICD10_Subkategori.objects.get(subkat=subkat),
+						jumlah_baru_l = sumCase[idx][0],
+						jumlah_baru_p = sumCase[idx][1],
+						jumlah_lama_l = sumCase[idx][2],
+						jumlah_lama_p = sumCase[idx][3],
+						jumlah = sumCase[idx][4],
+						gakin = sumCase[idx][5]
 						)
 
-					kat = ICD10_Subkategori.objects.filter(subkat=disease[0]).values("kat")[0]['kat']
-					if Jumlah_Kasus_Kat.objects.filter(kode=code, kat=kat).exists():
-						print("update Jumlah_Kasus_Kat")
-						Jumlah_Kasus_Kat.objects.filter(kode=code, kat=kat)\
-						.update(
-							jumlah_baru_l=F('jumlah_baru_l') + jksbl, 
-							jumlah_baru_p=F('jumlah_baru_p') + jksbp,
-							jumlah_lama_l=F('jumlah_lama_l') + jksll, 
-							jumlah_lama_p=F('jumlah_lama_p') + jkslp,
-							jumlah = F('jumlah') + jksbl + jksbp + jksll + jkslp
-							)
-					else:
-						print("create new Jumlah_Kasus_Kat")
-						Jumlah_Kasus_Kat.objects.create(
-						kode = Indeks.objects.get(kode=code),
-						kat = ICD10_Kategori.objects.get(kat=kat),
-						jumlah_baru_l = jksbl,
-						jumlah_baru_p = jksbp,
-						jumlah_lama_l = jksll,
-						jumlah_lama_p = jkslp,
-						jumlah = jksbl + jksbp + jksll + jkslp,
-						gakin = gakin[idx][0]
+				if Jumlah_Kasus_Kat.objects.filter(kode=code, kat=kat).exists():
+					print("update Jumlah_Kasus_Kat")
+					Jumlah_Kasus_Kat.objects.filter(kode=code, kat=kat)\
+					.update(
+						jumlah_baru_l=F('jumlah_baru_l') + sumCase[idx][0], 
+						jumlah_baru_p=F('jumlah_baru_p') + sumCase[idx][1],
+						jumlah_lama_l=F('jumlah_lama_l') + sumCase[idx][2], 
+						jumlah_lama_p=F('jumlah_lama_p') + sumCase[idx][3],
+						jumlah = F('jumlah') + sumCase[idx][4],
+						gakin= F('gakin') + sumCase[idx][5]
 						)
+				else:
+					print("create new Jumlah_Kasus_Kat")
+					Jumlah_Kasus_Kat.objects.create(
+					kode = Indeks.objects.get(kode=code),
+					kat = ICD10_Kategori.objects.get(kat=kat),
+					jumlah_baru_l = sumCase[idx][0],
+					jumlah_baru_p = sumCase[idx][1],
+					jumlah_lama_l = sumCase[idx][2],
+					jumlah_lama_p = sumCase[idx][3],
+					jumlah = sumCase[idx][4],
+					gakin = sumCase[idx][5]
+					)
 
 		print("Done")
-		print(val_pkmCode)
-		print(val_date)
+		print(list_pkmCode)
+		print(date)
 		print(len(diseases))
 		print(len(diseases)*24)
 
@@ -367,28 +308,19 @@ def index(request):
 				.filter(icd_10=kodePenyakit)
 			else: #Semua Jenis
 				qs = Jumlah_Kategori.objects.select_related('kode__kode_pkm')
-		print ("query penyakit")
-		print(qs)
+		
 		if is_valid_queryparam(gender_query) and gender_query != "Semua Jenis":
 			qs = qs.filter(kat_pasien__jenis_kelamin__iexact=gender_query)
 
-		print("query gender")
-		print(qs)
 		if is_valid_queryparam(umur_query) and umur_query != "Semua Umur":
 			qs = qs.filter(kat_pasien__umur__iexact=umur_query)
 
-		print("query umur")
-		print(qs)
 		if is_valid_queryparam(dateStart_query):
 			qs = qs.filter(kode__tanggal__gte=dateStart_query)
 
-		print("query tanggal awal")
-		print(qs)
 		if is_valid_queryparam(dateEnd_query):
 			qs = qs.filter(kode__tanggal__lt=dateEnd_query)
 
-		print("query tanggal akhir")
-		print(qs)
 		if is_valid_queryparam(jenisKasus_query):
 			if jenisKasus_query=="Kasus Baru":
 				qsPkm = qs.values('kode__kode_pkm', 'kode__kode_pkm__nama_pkm').annotate(kasus = Sum('kasus_baru'))
@@ -423,10 +355,6 @@ def index(request):
 					qsChartPenyakit = qs.values('kat__nama_kat').annotate(kasus = Sum('kasus_lama')).order_by('kasus')[:10]
 				elif jenisKasus_query=="Semua Jenis":
 					qsChartPenyakit = qs.values('kat__nama_kat').annotate(kasus=Sum(F('kasus_lama') + F('kasus_baru'))).order_by('kasus')[:10]
-		
-		print("query jenis kasus")
-		print(qsPkm)
-		print(qsKec)
 
 		qsChartPkm = qsPkm.order_by('-kasus')[:10]
 		qsChartKec = qsKec.order_by('-kasus')[:10]
