@@ -16,6 +16,7 @@ import os
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TEMPLATE_DIR = os.path.join(BASE_DIR,"templates")
 STATIC_DIR = os.path.join(BASE_DIR,"static")
+GDAL_LIBRARY_PATH='C:/Users/User/Miniconda3/Lib/site-packages/gdal-2.4.4/data'
 
 
 # Quick-start development settings - unsuitable for production
