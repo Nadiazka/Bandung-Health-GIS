@@ -17,8 +17,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TEMPLATE_DIR = os.path.join(BASE_DIR,"templates")
 STATIC_DIR = os.path.join(BASE_DIR,"static")
 #GDAL_LIBRARY_PATH='C:/Users/User/Miniconda3/Lib/site-packages/gdal-2.4.4/data'
-GDAL_LIBRARY_PATH='C:/Users/User/Miniconda3/Lib/site-packages/django/contrib/gis/gdal/libgdal.so'
-
+#GDAL_LIBRARY_PATH='C:/Users/User/Miniconda3/Lib/site-packages/django/contrib/gis/gdal/libgdal.py'
+set GDAL_DATA='C:/Users/User/Miniconda3/Lib/site-packages/gdal-2.4.4/data'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
