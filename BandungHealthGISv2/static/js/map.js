@@ -5,22 +5,18 @@ var Layer1 = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
 var Layer2 = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png', {
 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'});
 
-/*
-	// get data
-URLDataPkm="/data/graph/";
-URLDataKec="https://raw.githubusercontent.com/Nadiazka/TugasAkhir/master/trialv12/data/DataKecamatan.json";
-  // load GeoJSON from an external file
+
+// load GeoJSON from an external file
 URLpkm = "static/data/areaPkm.geojson";
 URLkec = "static/data/areaKec.geojson";
 URLtpkm = "static/data/titikPkm.geojson";
+
+/*
+// load GeoJSON from an external file
+URLpkm = "https://raw.githubusercontent.com/Nadiazka/Bandung-Health-GIS/master/BandungHealthGISv2/static/data/areaPkm.geojson";
+URLkec = "https://raw.githubusercontent.com/Nadiazka/Bandung-Health-GIS/master/BandungHealthGISv2/static/data/areaKec.geojson";
+URLtpkm = "https://raw.githubusercontent.com/Nadiazka/Bandung-Health-GIS/master/BandungHealthGISv2/static/data/titikPkm.geojson";
 */
-// get data
-//URLDataPkm="https://raw.githubusercontent.com/Nadiazka/TugasAkhir/master/trialv12/data/DataPuskesmasv5.json";
-URLDataKec="https://raw.githubusercontent.com/Nadiazka/TugasAkhir/master/trialv12/data/DataKecamatan.json";
-  // load GeoJSON from an external file
-URLpkm = "https://raw.githubusercontent.com/Nadiazka/TugasAkhir/master/trialv12/data/areaPkm.geojson";
-URLkec = "https://raw.githubusercontent.com/Nadiazka/TugasAkhir/master/trialv12/data/areaKec.geojson";
-URLtpkm = "https://raw.githubusercontent.com/Nadiazka/TugasAkhir/master/trialv12/data/titikPkm.geojson";
 
 // get Kecamatan
 kec = {}

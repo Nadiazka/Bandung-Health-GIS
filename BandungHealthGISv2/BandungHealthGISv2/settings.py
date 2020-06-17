@@ -16,10 +16,6 @@ import os
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TEMPLATE_DIR = os.path.join(BASE_DIR,"templates")
 STATIC_DIR = os.path.join(BASE_DIR,"static")
-#GDAL_LIBRARY_PATH='C:/Users/User/Miniconda3/Lib/site-packages/gdal-2.4.4/data'
-#GDAL_LIBRARY_PATH='C:/Users/User/Miniconda3/Lib/site-packages/django/contrib/gis/gdal/libgdal.py'
-#set GDAL_DATA='C:/Users/User/Miniconda3/Lib/site-packages/gdal-2.4.4/data'
-GDAL_LIBRARY_PATH = r'C:/OSGeo4W64/bin/gdal111'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
@@ -44,7 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'app_BHGISv2',
-    'accounts.apps.AccountsConfig',
+    'accounts',
     'django_filters',
     'import_export',
     'softdelete',
@@ -98,7 +94,7 @@ WSGI_APPLICATION = 'BandungHealthGISv2.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME' : 'bhgisv2',
+        'NAME' : 'bhgisv7',
         'USER' :'root',
         'PASSWORD' :'miayam5.000',
         'HOST' :'localhost',

@@ -13,25 +13,3 @@ class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ['id_dinkes']
-
-"""
-			
-class EditProfileForm(UserChangeForm):
-	class Meta:
-		model = User
-		fields = ['username', 'email', 'first_name', 'last_name']
-
-
-
-class EditProfileForm(forms.ModelForm):
-    class Meta:
-        model = Profile
-        fields = ['id_dinkes']
-
-    def save(self, user=None):
-        user_profile = super(EditProfileForm, self).save(commit=False)
-        if user:
-            user_profile.user = user
-        user_profile.save()
-        return user_profile
-"""

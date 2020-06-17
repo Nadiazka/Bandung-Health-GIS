@@ -8,5 +8,5 @@ class Profile(models.Model):
     id_dinkes = models.CharField(max_length=30, primary_key=True)
 
     def __str__(self):
-    	return str(self.user)
+    	return str(self.user.username)
     
