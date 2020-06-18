@@ -247,7 +247,7 @@ $.getJSON(URLtpkm,function(data){
 
 //Clustering
   var Clustering = L.layerGroup();
-  var dataClustering = ["3273030", "3273040", "3273020"]
+  var dataClustering = ["3273030", "3273020"]
   $.getJSON(URLkec,function(data){
       console.log(data);
       for (var i = 0; i < dataClustering.length; i++) {
