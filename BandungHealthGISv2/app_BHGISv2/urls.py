@@ -10,5 +10,5 @@ urlpatterns =[
 	url(r'^PenyakitKat/', views.PenyakitKat.as_view()),
 	url(r'^Puskesmas/', views.Puskesmas.as_view()),
 	url(r'^Kecamatan/', views.Kecamatan.as_view()),
-	url(r'^CobaView01/', views.CobaView01.as_view()),
+	url(r'^DataClustering/', views.DataClustering.as_view()),
 ]

@@ -409,7 +409,15 @@ def index(request):
 		distNormKec = qsKec.aggregate(Max('kasus'), Min('kasus'))
 		#hasilClust = clustering(qsKec, gender_query)
 		#print(hasilClust)
-
+		query = {
+			'penyakit_query': penyakit_query,
+			'gender_query':gender_query,
+			'umur_query': umur_query,
+			'dateStart_query' : dateStart_query,
+			'dateEnd_query':dateEnd_query,
+			'jenisKasus_query':jenisKasus_query,
+			'lastDate' :lastDate
+		}
 		data ={
 			'areaPkm' : list(qsPkm),
 			'areaKec' : list(qsKec),
@@ -421,6 +429,7 @@ def index(request):
 			'chartGender' : list(qsChartGender),
 			'chartUmur' : list(qsChartUmur),
 			'chartPeriode' : list(qsChartDate),
+			'qs' :query
 		}
 		global iClustering
 		iClustering ={
@@ -445,17 +454,19 @@ def get_data(request):
 	response = json.dumps(list(qsFiltering))
 	return HttpResponse(response)
 
-class CobaView01(View):
+class DataClustering(View):
 	def get(self, request):
-		qs = Kecamatan.objects.values('kode_kec', 'nama_kec', 'lat', 'longt')
-		qs2 = Kecamatan.objects.values('kode_kec', 'nama_kec', 'jml_pddk', 'pddk_l', 'pddk_p')
+		#qsGeodict = Kecamatan.objects.values('kode_kec', 'nama_kec', 'lat', 'longt')
+		#qsDatadict = Kecamatan.objects.values('kode_kec', 'nama_kec', 'jml_pddk', 'pddk_l', 'pddk_p')
+		qsSubkat = ICD10_Subkategori.objects.values('subkat')
 
 		data ={
-			'query1' : list(qs),
-			'query2' : list(qs2)
+			#'Geodict' : list(qsGeodict),
+			#'Datadict' : list(qsDatadict),
+			'Subkat' : list(qsSubkat)
 		}
 		return JsonResponse(data)
-
+		
 class PenyakitSubkat(generics.ListCreateAPIView):
 	queryset = ICD10_Subkategori.objects.values('nama_subkat')
 	serializer_class = ICD10_SubkategoriSerializer2

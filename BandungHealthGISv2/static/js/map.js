@@ -124,7 +124,7 @@ function getColorPkm(d) {
               d > Math.round(0.4*(statPkm.kasus__max-statPkm.kasus__min))  ? '#FC4E2A' :
               d > Math.round(0.2*(statPkm.kasus__max-statPkm.kasus__min))  ? '#FD8D3C' :
               d > statPkm.kasus__min  ? '#FEB24C' :
-              d > 0  ? '#FFEDA0':
+              d >= 0  ? '#FFEDA0':
                        '#BCADA9';
   }
 
@@ -217,7 +217,7 @@ function getColorKec(d) {
               d > Math.round(0.4*(statKec.kasus__max-statKec.kasus__min))  ? '#FC4E2A' :
               d > Math.round(0.2*(statKec.kasus__max-statKec.kasus__min))  ? '#FD8D3C' :
               d > statKec.kasus__min  ? '#FEB24C' :
-              d > 0  ? '#FFEDA0':
+              d >= 0  ? '#FFEDA0':
                        '#BCADA9';
   }
 
@@ -286,28 +286,150 @@ $.getJSON(URLtpkm,function(data){
 	L.control.layers(baseMaps, overlayMaps, {position:'topleft'}).addTo(map);
 
 	//Legenda
-	  var legend = L.control({position: 'bottomright'});
+	  var legendPkm = L.control({position: 'bottomright'});
 
-	      legend.onAdd = function (map) {
-
+	      legendPkm.onAdd = function (map) {
+          console.log("Legenda Pkm")
+          nullGrades = "tidak ada data";
+          listGrades=[-1];
+          range = statPkm.kasus__max-statPkm.kasus__min;
+          if ( range>=5){
+            listGrades.push(statPkm.kasus__min,
+                Math.round(0.2*(statPkm.kasus__max-statPkm.kasus__min)),
+                Math.round(0.4*(statPkm.kasus__max-statPkm.kasus__min)),
+                Math.round(0.6*(statPkm.kasus__max-statPkm.kasus__min)),
+                Math.round(0.8*(statPkm.kasus__max-statPkm.kasus__min)),
+                statPkm.kasus__max)
+          } 
+            else{
+              for (var i=statPkm.kasus__min; i<statPkm.kasus__max; i++){
+                listGrades.push(i)
+              }
+            }
+          console.log(listGrades)
 	          var div = L.DomUtil.create('div', 'info legend'),
-	              grades = ["tidak ada data", 0, 10, 25, 50, 100, 200, 500],
+	              grades = listGrades,
 	              labels = [],
 	              from, to;
-
+            labels.push('<i style="background:' + getColorPkm(nullGrades) + '"></i> ' +
+                    nullGrades);
+            console.log(grades)
+            console.log(grades.length)
 	          for (var i = 0; i < grades.length; i++) {
 	              from = grades[i];
 	              to = grades[i + 1];
 
 	              labels.push(
-	                  '<i style="background:' + getColor(from + 1) + '"></i> ' +
-	                  from + (to ? '&ndash;' + to : '+'));
+                    '<i style="background:' + getColorPkm(from+1) + '"></i> ' +
+                      (from+1) + (to ? '&ndash;' + to : '+'));
 	          }
 
 	          div.innerHTML = labels.join('<br>');
 	          return div;
 	      };
 
-      legend.addTo(map);
+      legendPkm.addTo(map); //Buat default
+
+    var legendKec = L.control({position: 'bottomright'});
+
+      legendKec.onAdd = function (map) {
+          console.log("Legenda kec")
+          nullGrades = "tidak ada data";
+          listGrades=[-1];
+          range = statKec.kasus__max-statKec.kasus__min;
+          if ( range>=5){
+            listGrades.push(statKec.kasus__min,
+                Math.round(0.2*(statKec.kasus__max-statKec.kasus__min)),
+                Math.round(0.4*(statKec.kasus__max-statKec.kasus__min)),
+                Math.round(0.6*(statKec.kasus__max-statKec.kasus__min)),
+                Math.round(0.8*(statKec.kasus__max-statKec.kasus__min)),
+                statKec.kasus__max)
+          } 
+            else{
+              for (var i=statKec.kasus__min; i<statKec.kasus__max; i++){
+                listGrades.push(i)
+              }
+            }
+          console.log(listGrades)
+            var div = L.DomUtil.create('div', 'info legend'),
+                grades = listGrades,
+                labels = [],
+                from, to;
+            labels.push('<i style="background:' + getColorKec(nullGrades) + '"></i> ' +
+                    nullGrades);
+            console.log(grades)
+            console.log(grades.length)
+            for (var i = 0; i < grades.length; i++) {
+                from = grades[i];
+                to = grades[i + 1];
+
+                labels.push(
+                    '<i style="background:' + getColorKec(from+1) + '"></i> ' +
+                      (from+1) + (to ? '&ndash;' + to : '+'));
+            }
+
+            div.innerHTML = labels.join('<br>');
+            return div;
+      };
+
+    map.on('overlayadd', function (eventLayer) {
+    // Switch to the Population legend...
+    if (eventLayer.name === 'Kecamatan') {
+        this.removeControl(legendPkm);
+        legendKec.addTo(this);
+    } else { // Or switch to the Population Change legend...
+        this.removeControl(legendKec);
+        legendPkm.addTo(this);
+    }
+});
+
+  // control that shows state info on hover
+
+  var info = L.control({position: 'bottomleft'});
+
+  console.log(qs.penyakit_query)
+  optPenyakit = "Semua Penyakit"; 
+  optGender = "Semua Jenis"; 
+  optUmur = "Semua Umur"; 
+  optDateStart = qs.lastDate;
+  optDateEnd = " "; 
+  optKasus = "Semua Jenis";
+
+  if (qs.penyakit_query !=null){optPenyakit: qs.penyakit_query}
+  console.log(optPenyakit)
+
+    if (qs.gender_query===" "){}
+      else {optGender: qs.gender_query}
+  console.log(optGender)
+    if (qs.umur_query===null){}
+      else {optUmur: qs.umur_query}
+  console.log(optUmur)
+    if (qs.dateStart_query===null){}
+      else {optDateStart: qs.dateStart_query}
+  console.log(optDateStart)
+    if (qs.dateEnd_query===null){}
+      else {optDateEnd: qs.dateEnd_query}
+  console.log(optDateEnd)
+    if (qs.jenisKasus_query===null){}
+        else {optKasus: qs.jenisKasus_query}
+  console.log(optKasus)
+
+  info.onAdd = function (map) {
+    this._div = L.DomUtil.create('div', 'info');
+    this.update();
+    return this._div;
+  };
+
+  info.update = function () {
+    this._div.innerHTML = '<h6>Peta Tematik</h6>';
+    /*<br/><ul><li><strong><p>Penyakit:</p></strong>'+optPenyakit '</li>'+ '<li><p>Jenis Kelamin :</p>' + optGender '</li></ul>';
+    +
+     '<b><p>Jenis Kelamin: </p></b>' + optGender '<br />'+
+     '<b><p>Umur: </p></b>' + optUmur '<br />'+
+     '<b><p>Tanggal: </p></b>' + optDateStart + '-' + optDateEnd'<br />'+
+     '<b><p>Jenis Kasus: </p></b>' + optKasus '<br />';*/
+  };
+
+  info.addTo(map);
 
 });
