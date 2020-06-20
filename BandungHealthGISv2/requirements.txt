@@ -7,6 +7,7 @@ colorama==0.4.3
 coverage==4.0.3
 defusedxml==0.6.0
 diff-match-patch==20181111
+dj-database-url==0.5.0
 Django==3.0.3
 django-excel==0.0.10
 django-filter==2.3.0
@@ -30,6 +31,7 @@ odfpy==1.4.1
 openpyxl==3.0.3
 packaging==20.4
 pluggy==0.13.1
+psycopg2==2.8.5
 py==1.8.1
 pycparser==2.20
 pyexcel==0.6.2
