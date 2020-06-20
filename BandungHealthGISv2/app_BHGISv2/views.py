@@ -459,11 +459,25 @@ class DataClustering(View):
 		#qsGeodict = Kecamatan.objects.values('kode_kec', 'nama_kec', 'lat', 'longt')
 		#qsDatadict = Kecamatan.objects.values('kode_kec', 'nama_kec', 'jml_pddk', 'pddk_l', 'pddk_p')
 		qsSubkat = ICD10_Subkategori.objects.values('subkat')
-
+		tgl = Indeks.objects.values('tanggal').order_by('tanggal').distinct()[11]['tanggal']
+		qsLooping = Jumlah_Kasus_Subkat.objects.select_related('kode__kode_pkm')\
+		.filter(kode__tanggal=tgl)\
+		.values('kode__tanggal', 'kode__kode_pkm__kode_kec', 'icd_10')\
+		.annotate(
+			baru_l=Sum('jumlah_baru_l'),
+			baru_p=Sum('jumlah_baru_p'), 
+			lama_l=Sum('jumlah_lama_l'), 
+			lama_p=Sum('jumlah_lama_p'), 
+			baru=Sum(F('jumlah_baru_l')+F('jumlah_baru_p')), 
+			lama=Sum(F('jumlah_lama_l')+F('jumlah_lama_p')), 
+			l=Sum(F('jumlah_baru_l')+F('jumlah_lama_l')), 
+			p=Sum(F('jumlah_baru_p')+F('jumlah_lama_p')), 
+			jumlah=Sum('jumlah'))
 		data ={
 			#'Geodict' : list(qsGeodict),
 			#'Datadict' : list(qsDatadict),
-			'Subkat' : list(qsSubkat)
+			#'Subkat' : list(qsSubkat),
+			'qsHasil' : list(qsLooping)
 		}
 		return JsonResponse(data)
 		
