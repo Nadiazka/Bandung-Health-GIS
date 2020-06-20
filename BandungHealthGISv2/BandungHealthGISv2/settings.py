@@ -94,15 +94,16 @@ WSGI_APPLICATION = 'BandungHealthGISv2.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
+        #'ENGINE': 'django.db.backends.mysql',
+        'ENGINE': 'django.db.backends.postgresql',
         'NAME' : 'bhgisv7',
         'USER' :'root',
         'PASSWORD' :'miayam5.000',
         'HOST' :'localhost',
         'PORT' : '3306',
-        'OPTIONS':{
-            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
-        }
+        #'OPTIONS':{
+        #    'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
+        #}
     }
 }
 
