@@ -78,6 +78,10 @@ class JumlahChapterResource(resources.ModelResource):
 		model = Jumlah_Chapter
 		import_id_fields = ('kode',)
 
+class KlasterPenyakitResource(resources.ModelResource):
+	class Meta:
+		model = Klaster_Penyakit
+
 
 #Register to admin site
 @admin.register(Pasien)
@@ -135,5 +139,9 @@ class ViewJumlahKategori(ImportExportModelAdmin):
 @admin.register(Jumlah_Chapter)
 class ViewJumlahKategori(ImportExportModelAdmin):
 	resource_class = JumlahChapterResource
+
+@admin.register(Klaster_Penyakit)
+class ViewKlasterPenyakit(ImportExportModelAdmin):
+	resource_class = KlasterPenyakitResource
 
 admin.site.register(LogEntry)

@@ -1,4 +1,4 @@
-from django.db.models import Q, F, Sum, Avg, Max, Min
+from django.db.models import Q, F, Sum, Avg, Max, Min, Count
 from itertools import chain
 from django.http import JsonResponse
 from rest_framework import generics, viewsets, status, mixins
@@ -27,6 +27,7 @@ def is_valid_queryparam(param):
 	return param != '' and param is not None
 
 iClustering = {}
+
 # Create your views here.
 @login_required(login_url='login')
 def index(request):
@@ -294,6 +295,12 @@ def index(request):
 						gakin = gakin[idx][0]
 						)
 
+		#Clustering
+		countPkm = Indeks.objects.select_related('kode__kode_pkm')\
+		.filter(tanggal=date).annotate(Count('kode__kode_pkm', distinct=True))
+		if countPkm>60 :
+			Clustering(date)
+
 		print("Done")
 		print(val_pkmCode)
 		print(val_date)
@@ -407,8 +414,7 @@ def index(request):
 		qsChartKec = qsKec.order_by('-kasus')[:10]
 		distNormPkm = qsPkm.aggregate(Max('kasus'), Min('kasus'))
 		distNormKec = qsKec.aggregate(Max('kasus'), Min('kasus'))
-		#hasilClust = clustering(qsKec, gender_query)
-		#print(hasilClust)
+		
 		query = {
 			'penyakit_query': penyakit_query,
 			'gender_query':gender_query,
@@ -431,11 +437,6 @@ def index(request):
 			'chartPeriode' : list(qsChartDate),
 			'qs' :query
 		}
-		global iClustering
-		iClustering ={
-			'queryKec' : list(qsKec),
-			'gender' : gender_query
-		}
 		return render (request, 'app_BHGIS/indexV2.html', data)
 
 	return render (request, 'app_BHGIS/indexV2.html')
@@ -443,6 +444,26 @@ def index(request):
 class dataFiltering(View):
 	def get(self, request):
 		return JsonResponse(iClustering)
+
+def inputClustering(tgl):
+	qsLooping = Jumlah_Kasus_Subkat.objects.select_related('kode__kode_pkm')\
+		.filter(kode__tanggal=tgl)\
+		.values('kode__tanggal', 'kode__kode_pkm__kode_kec', 'icd_10')\
+		.annotate(
+			baru_l=Sum('jumlah_baru_l'),
+			baru_p=Sum('jumlah_baru_p'), 
+			lama_l=Sum('jumlah_lama_l'), 
+			lama_p=Sum('jumlah_lama_p'), 
+			baru=Sum(F('jumlah_baru_l')+F('jumlah_baru_p')), 
+			lama=Sum(F('jumlah_lama_l')+F('jumlah_lama_p')), 
+			l=Sum(F('jumlah_baru_l')+F('jumlah_lama_l')), 
+			p=Sum(F('jumlah_baru_p')+F('jumlah_lama_p')), 
+			jumlah=Sum('jumlah'))
+	data ={
+		'qsHasil' : list(qsLooping)
+	}
+	return JsonResponse(data)
+
 		
 def get_data(request):
 	"""

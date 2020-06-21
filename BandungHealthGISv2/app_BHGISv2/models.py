@@ -29,6 +29,7 @@ class Puskesmas(SoftDeleteModel):
 	nama_pkm = models.CharField(max_length=30)
 	lat = models.FloatField(null=True)
 	longt = models.FloatField(null=True)
+	alamat = models.CharField(max_length=119)
 
 	def __str__(self):
 		return self.nama_pkm
@@ -141,3 +142,16 @@ class Jumlah_Chapter(SoftDeleteModel):
 	
 	def __str__(self):
 		return str(self.kode)
+
+class Klaster_Penyakit(SoftDeleteModel):
+	tanggal = models.DateField()
+	subkat = models.ForeignKey(ICD10_Subkategori, related_name='Klaster_Penyakit', on_delete=models.CASCADE)
+	jenis_kelamin = models.CharField(max_length=14)
+	jenis_kasus = models.CharField(max_length=14)
+	jumlah_kasus = models.PositiveSmallIntegerField()
+	klaster_kode = models.CharField(max_length=69)
+	klaster_nama = models.CharField(max_length=79)
+	llr = models.PositiveSmallIntegerField()
+
+	def __str__(self):
+		return str(self.tanggal)
