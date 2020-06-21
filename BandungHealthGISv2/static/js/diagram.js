@@ -83,15 +83,14 @@ var cPnykt = document.getElementById("ChartPenyakit").getContext('2d');
 chartPenyakitLabel = [];
 chartPenyakitData = [];
 for (var i = 0; i < chartPenyakit.length; i++) {
-	/*
-    if (chartPenyakit[i].icd_10__nama_subkat != " "){
+    if (chartPenyakit[i].icd_10__nama_subkat != null && chartPenyakit[i].icd_10__nama_subkat != undefined){
     	chartPenyakitLabel[i] = chartPenyakit[i].icd_10__nama_subkat;
     }
     else{chartPenyakitLabel[i] = chartPenyakit[i].kat__nama_kat}
-    ;*/
-	chartPenyakitLabel[i] = chartPenyakit[i].icd_10__nama_subkat
+    ;
     chartPenyakitData[i]=chartPenyakit[i].kasus
   };
+  console.log(chartPenyakitLabel)
 var myChartPnykt = new Chart(cPnykt, {
   type: 'bar',
   data: {

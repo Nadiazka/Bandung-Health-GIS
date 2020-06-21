@@ -22,11 +22,13 @@ from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 import sys
 from collections import OrderedDict
+from calendar import monthrange
 
 def is_valid_queryparam(param):
 	return param != '' and param is not None
 
-iClustering = {}
+def last_day_of_month(date_value):
+    return date_value.replace(day = monthrange(date_value.year, date_value.month)[1])
 
 # Create your views here.
 @login_required(login_url='login')
@@ -331,9 +333,12 @@ def index(request):
 
 		#Tampilan Default
 		#Get last date in database
-		lastDate = Indeks.objects.values('tanggal').order_by('-tanggal')[0]['tanggal']
-		print(lastDate)
-		qs = Jumlah_Kategori.objects.select_related('kode__kode_pkm').filter(kode__tanggal=lastDate)
+		startPeriode = Indeks.objects.values('tanggal').order_by('-tanggal')[0]['tanggal']
+		print(startPeriode)
+		#get last date in the last month
+		endPeriode = last_day_of_month(startPeriode)
+
+		qs = Jumlah_Kategori.objects.select_related('kode__kode_pkm').filter(kode__tanggal=startPeriode)
 		qsPkm = qs.values('kode__kode_pkm', 'kode__kode_pkm__nama_pkm')\
 				.annotate(kasus = Sum('kasus_baru'))
 		qsKec = qs.values('kode__kode_pkm__kode_kec', 'kode__kode_pkm__kode_kec__nama_kec')\
@@ -371,9 +376,15 @@ def index(request):
 
 		if is_valid_queryparam(dateStart_query):
 			qs = qs.filter(kode__tanggal__gte=dateStart_query)
+			tempStartDate = datetime.strptime(dateStart_query, '%Y-%m-%d').date()
+			startPeriode = tempStartDate
 
 		if is_valid_queryparam(dateEnd_query):
 			qs = qs.filter(kode__tanggal__lt=dateEnd_query)
+			tempEndDate = Indeks.objects.filter(tanggal__lt=dateEnd_query)\
+			.order_by('-tanggal')[0]['tanggal']
+			#tempEndDate2 = datetime.strptime(tempEndDate1, '%Y-%m-%d').date()
+			endPeriode = last_day_of_month(tempEndDate)
 
 		if is_valid_queryparam(jenisKasus_query):
 			if jenisKasus_query=="Kasus Baru":
@@ -414,15 +425,17 @@ def index(request):
 		qsChartKec = qsKec.order_by('-kasus')[:10]
 		distNormPkm = qsPkm.aggregate(Max('kasus'), Min('kasus'))
 		distNormKec = qsKec.aggregate(Max('kasus'), Min('kasus'))
+		startPeriode = startPeriode.strftime('%d/%m/%y')
+		endPeriode= endPeriode.strftime('%d/%m/%y')
 		
+		#Informasi legenda di map
 		query = {
 			'penyakit_query': penyakit_query,
 			'gender_query':gender_query,
 			'umur_query': umur_query,
-			'dateStart_query' : dateStart_query,
-			'dateEnd_query':dateEnd_query,
 			'jenisKasus_query':jenisKasus_query,
-			'lastDate' :lastDate
+			'startPeriode' :startPeriode,
+			'endPeriode': endPeriode
 		}
 		data ={
 			'areaPkm' : list(qsPkm),

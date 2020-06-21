@@ -246,19 +246,53 @@ $.getJSON(URLtpkm,function(data){
   });
 
 //Clustering
-  var Clustering = L.layerGroup();
-  var dataClustering = ["3273030", "3273020"]
+  var Clustering1 = L.layerGroup();
+  var dataClustering1 = ["3273030", "3273020"]
   $.getJSON(URLkec,function(data){
       console.log(data);
-      for (var i = 0; i < dataClustering.length; i++) {
+      for (var i = 0; i < dataClustering1.length; i++) {
         L.geoJson(data, {
           filter : function (feature){
-            if (feature.properties.kode_kode=== dataClustering[i]) return true
+            if (feature.properties.kode_kode=== dataClustering1[i]) return true
           },
           style : function(feature){
-            if (feature.properties.kode_kode=== dataClustering[i]) return {color: "#ff0000"};
+            if (feature.properties.kode_kode=== dataClustering1[i]) return {color: "#ff0000"};
           }
-        }).addTo(Clustering);
+        }).addTo(Clustering1);
+    }
+      console.log("clustering aman")
+    });
+
+  var Clustering2 = L.layerGroup();
+  var dataClustering2 = ["3273141", "3273142"]
+  $.getJSON(URLkec,function(data){
+      console.log(data);
+      for (var i = 0; i < dataClustering2.length; i++) {
+        L.geoJson(data, {
+          filter : function (feature){
+            if (feature.properties.kode_kode=== dataClustering2[i]) return true
+          },
+          style : function(feature){
+            if (feature.properties.kode_kode=== dataClustering2[i]) return {color: "#ff0000"};
+          }
+        }).addTo(Clustering2);
+    }
+      console.log("clustering aman")
+    });
+
+  var Clustering3 = L.layerGroup();
+  var dataClustering3 = ["3273200", "3273210"]
+  $.getJSON(URLkec,function(data){
+      console.log(data);
+      for (var i = 0; i < dataClustering3.length; i++) {
+        L.geoJson(data, {
+          filter : function (feature){
+            if (feature.properties.kode_kode=== dataClustering3[i]) return true
+          },
+          style : function(feature){
+            if (feature.properties.kode_kode=== dataClustering3[i]) return {color: "#ff0000"};
+          }
+        }).addTo(Clustering3);
     }
       console.log("clustering aman")
     });
@@ -280,7 +314,9 @@ $.getJSON(URLtpkm,function(data){
 		"Lokasi Puskesmas" : TitikPkm,
 	    "Puskesmas": LayerPkm,
 	    "Kecamatan" : LayerKec,
-      "Clustering" : Clustering
+      "Clustering 1" : Clustering1,
+      "Clustering 2" : Clustering2,
+      "Clustering 3" : Clustering3,
 	};
 
 	L.control.layers(baseMaps, overlayMaps, {position:'topleft'}).addTo(map);
@@ -391,28 +427,57 @@ $.getJSON(URLtpkm,function(data){
   optPenyakit = "Semua Penyakit"; 
   optGender = "Semua Jenis"; 
   optUmur = "Semua Umur"; 
-  optDateStart = qs.lastDate;
-  optDateEnd = " "; 
+  optDateStart = qs.startPeriode;
+  optDateEnd = qs.endPeriode; 
   optKasus = "Semua Jenis";
+  optClust1 = "-";
+  optClust2 = "-";
+  optClust3 = "-";
 
-  if (qs.penyakit_query !=null){optPenyakit: qs.penyakit_query}
+  if (qs.penyakit_query != null && qs.penyakit_query != undefined){
+    optPenyakit = qs.penyakit_query
+  }
   console.log(optPenyakit)
 
-    if (qs.gender_query===" "){}
-      else {optGender: qs.gender_query}
+  if (qs.gender_query != null && qs.gender_query != undefined){
+    optGender = qs.gender_query
+  }
   console.log(optGender)
-    if (qs.umur_query===null){}
-      else {optUmur: qs.umur_query}
+
+  if (qs.umur_query != null && qs.umur_query != undefined){
+    optUmur = qs.umur_query
+  }
   console.log(optUmur)
-    if (qs.dateStart_query===null){}
-      else {optDateStart: qs.dateStart_query}
+
+  if (qs.startPeriode != null && qs.startPeriode != undefined){
+    optDateStart = qs.startPeriode
+  }
   console.log(optDateStart)
-    if (qs.dateEnd_query===null){}
-      else {optDateEnd: qs.dateEnd_query}
+
+  if (qs.endPeriode != null && qs.endPeriode != undefined){
+    optDateEnd = qs.endPeriode
+  }
   console.log(optDateEnd)
-    if (qs.jenisKasus_query===null){}
-        else {optKasus: qs.jenisKasus_query}
+
+  if (qs.dateEnd_query != null && qs.dateEnd_query != undefined){
+    optDateEnd = qs.dateEnd_query
+  }
+  console.log(optDateEnd)
+
+  if (qs.jenisKasus_query != null && qs.jenisKasus_query != undefined){
+    optKasus = qs.jenisKasus_query
+  }
   console.log(optKasus)
+
+  if (qs.dateEnd_query != null && qs.dateEnd_query != undefined){
+    optDateEnd = qs.dateEnd_query
+  }
+  console.log(optDateEnd)
+
+  if (qs.dateEnd_query != null && qs.dateEnd_query != undefined){
+    optDateEnd = qs.dateEnd_query
+  }
+  console.log(optDateEnd)
 
   info.onAdd = function (map) {
     this._div = L.DomUtil.create('div', 'info');
@@ -421,13 +486,15 @@ $.getJSON(URLtpkm,function(data){
   };
 
   info.update = function () {
-    this._div.innerHTML = '<h6>Peta Tematik</h6>';
-    /*<br/><ul><li><strong><p>Penyakit:</p></strong>'+optPenyakit '</li>'+ '<li><p>Jenis Kelamin :</p>' + optGender '</li></ul>';
-    +
-     '<b><p>Jenis Kelamin: </p></b>' + optGender '<br />'+
-     '<b><p>Umur: </p></b>' + optUmur '<br />'+
-     '<b><p>Tanggal: </p></b>' + optDateStart + '-' + optDateEnd'<br />'+
-     '<b><p>Jenis Kasus: </p></b>' + optKasus '<br />';*/
+    this._div.innerHTML = '<h6>Data terpilih</h6>'+
+    '<br/><ul><li><p><strong>Penyakit : </strong>'+ optPenyakit +'</p></li>'+
+    '<li><p><strong>Jenis Kelamin : </strong>' + optGender +'</p></li>'+
+    '<li><p><strong>Umur : </strong>' + optUmur +'</p></li>'+
+    '<li><p><strong>Periode : </strong>' + optDateStart + ' <strong>-</strong> ' + optDateEnd +'</p></li>'+
+    '<li><p><strong>Jenis Kasus : </strong>' + optKasus +'</p></li>'+
+    '<li><p><strong>Clustering 1 : </strong>' + optClust1 +'</p></li>'+
+    '<li><p><strong>Clustering 2 : </strong>' + optClust2 +'</p></li>'+
+    '<li><p><strong>Clustering 3 : </strong>' + optClust3 +'</p></li></ul>';
   };
 
   info.addTo(map);
