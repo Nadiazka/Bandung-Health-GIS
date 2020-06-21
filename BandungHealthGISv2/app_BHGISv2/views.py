@@ -359,14 +359,14 @@ def index(request):
 				kodePenyakit = "Semua Penyakit"
 			print(kodePenyakit)
 			
-			if ICD10_Kategori.objects.filter(kat__iexact=kodePenyakit).exists():
-				qs = Jumlah_Kategori.objects.select_related('kode__kode_pkm')\
-				.filter(kat=kodePenyakit)
-			elif ICD10_Subkategori.objects.filter(subkat__iexact=kodePenyakit).exists():
+			if kodePenyakit = "Semua Penyakit" :
+				qs = Jumlah_Kategori.objects.select_related('kode__kode_pkm')
+			elif "." in kodePenyakit:
 				qs = Kasus.objects.select_related('kode__kode_pkm')\
 				.filter(icd_10=kodePenyakit)
-			else: #Semua Jenis
-				qs = Jumlah_Kategori.objects.select_related('kode__kode_pkm')
+			else:
+				qs = Jumlah_Kategori.objects.select_related('kode__kode_pkm')\
+				.filter(kat=kodePenyakit)
 		
 		if is_valid_queryparam(gender_query) and gender_query != "Semua Jenis":
 			qs = qs.filter(kat_pasien__jenis_kelamin__iexact=gender_query)
@@ -425,6 +425,20 @@ def index(request):
 		qsChartKec = qsKec.order_by('-kasus')[:10]
 		distNormPkm = qsPkm.aggregate(Max('kasus'), Min('kasus'))
 		distNormKec = qsKec.aggregate(Max('kasus'), Min('kasus'))
+
+		#Clustering
+		if kodePenyakit != "Semua Penyakit":
+			qsClustering = Klaster_Penyakit.objects\
+			.filter(
+				tanggal__gte=dateStart_query,
+				tanggal__lt=dateEnd_query,
+				subkat__icontains=kodePenyakit,
+				jenis_kelamin=gender_query,
+				jenis_kasus=jenisKasus_query
+				)\
+			.order_by('-llr')[:3]\
+			.values('subkat','klaster_kode', 'klaster_nama', 'llr')
+
 		startPeriode = startPeriode.strftime('%d/%m/%y')
 		endPeriode= endPeriode.strftime('%d/%m/%y')
 		
@@ -448,6 +462,7 @@ def index(request):
 			'chartGender' : list(qsChartGender),
 			'chartUmur' : list(qsChartUmur),
 			'chartPeriode' : list(qsChartDate),
+			'qsClustering' : list(qsClustering),
 			'qs' :query
 		}
 		return render (request, 'app_BHGIS/indexV2.html', data)
