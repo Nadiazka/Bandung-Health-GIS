@@ -11,5 +11,5 @@ urlpatterns =[
 	url(r'^Puskesmas/', views.Puskesmas.as_view()),
 	url(r'^Kecamatan/', views.Kecamatan.as_view()),
 	url(r'^DataClustering/', views.DataClustering.as_view()),
-	url(r'^InputClustering/', views.inputClustering, name='InputClustering'),
+	url(r'^Clustering/', views.funcClustering, name='Clustering'),
 ]

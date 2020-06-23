@@ -23,6 +23,7 @@ from django.core.files.storage import FileSystemStorage
 import sys
 from collections import OrderedDict
 from calendar import monthrange
+import requests
 
 def is_valid_queryparam(param):
 	return param != '' and param is not None
@@ -301,7 +302,7 @@ def index(request):
 		countPkm = Indeks.objects.select_related('kode__kode_pkm')\
 		.filter(tanggal=date).annotate(Count('kode__kode_pkm', distinct=True))
 		if countPkm>60 :
-			Clustering(date)
+			funcClustering(date)
 
 		print("Done")
 		print(val_pkmCode)
@@ -358,8 +359,8 @@ def index(request):
 			else:
 				kodePenyakit = "Semua Penyakit"
 			print(kodePenyakit)
-			
-			if kodePenyakit = "Semua Penyakit" :
+
+			if kodePenyakit == "Semua Penyakit" :
 				qs = Jumlah_Kategori.objects.select_related('kode__kode_pkm')
 			elif "." in kodePenyakit:
 				qs = Kasus.objects.select_related('kode__kode_pkm')\
@@ -473,7 +474,25 @@ class dataFiltering(View):
 	def get(self, request):
 		return JsonResponse(iClustering)
 
-def inputClustering(tgl):
+def funcClustering(tgl):
+	#urlOutput = requests.get('https://ssdsd')
+	#dataOutput = urlOutput.json()
+	dataOutput ={} 
+	if dataOutput is not None:
+		tanggal = dataOutput[0].tanggal
+		if Klaster_Penyakit.objects.filter(tanggal=tanggal).exists()==False:
+			for data in dataOutput:
+				Klaster_Penyakit.objects.create(
+					tanggal=data.tanggal,
+					subkat=ICD10_Subkategori.objects.get(subkat=data.subkat),
+					jenis_kelamin=data.jenis_kelamin,
+					jenis_kasus=data.jenis_kasus,
+					jumlah_kasus=data.kasus,
+					klaster_kode=data.klaster_kode,
+					klaster_nama=data.klaster_nama,
+					llr=data.llr
+					)
+
 	qsLooping = Jumlah_Kasus_Subkat.objects.select_related('kode__kode_pkm')\
 		.filter(kode__tanggal=tgl)\
 		.values('kode__tanggal', 'kode__kode_pkm__kode_kec', 'icd_10')\
