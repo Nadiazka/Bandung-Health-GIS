@@ -32,7 +32,7 @@ $.ajax({
         console.log("error")
       }
     });
-console.log(kec)
+
 //general fitur
 function resetHighlight(e) {
 	var layer = e.target;
@@ -129,7 +129,6 @@ function getColorPkm(d) {
   }
 
 $.getJSON(URLpkm,function(data){
-  console.log(data);
 	L.geoJson(data, {
 	style: stylePkm,
 	onEachFeature: onEachFeaturePkm
@@ -144,7 +143,6 @@ $.ajax({
     method: "GET",
     url: '/Kecamatan/',
     success: function(data){
-      console.log(data)
       for (var i = 0; i < data.length; i++) {
         dataKecamatan[data[i].kode_kec] = {"area" : data[i].nama_kec, "kasus" :"tidak ada data "};
       };
@@ -160,8 +158,6 @@ $.ajax({
         console.log("error")
       }
     });
-console.log(dataKecamatan)
-console.log(dataKec)
 
 var LayerKec = L.layerGroup();
 
@@ -249,7 +245,6 @@ $.getJSON(URLtpkm,function(data){
 console.log(qsClustering)
   var Clustering1 = L.layerGroup();
   var dataClustering1 = qsClustering[0].klaster_kode
-  //var dataClustering1 = ["3273030", "3273020"]
 
   function highlightFeatureClstr1(e) {
     var out = [];
@@ -289,7 +284,6 @@ console.log(qsClustering)
 
   var Clustering2 = L.layerGroup();
   var dataClustering2 = qsClustering[1].klaster_kode
-  //var dataClustering2 = ["3273141", "3273142"]
   
   function highlightFeatureClstr2(e) {
     var out = [];
@@ -329,7 +323,6 @@ console.log(qsClustering)
 
   var Clustering3 = L.layerGroup();
   var dataClustering3 = qsClustering[2].klaster_kode
-  var dataClustering3 = ["3273200", "3273210"]
   
   function highlightFeatureClstr3(e) {
     var out = [];
@@ -395,7 +388,6 @@ console.log(qsClustering)
 	  var legendPkm = L.control({position: 'bottomright'});
 
 	      legendPkm.onAdd = function (map) {
-          console.log("Legenda Pkm")
           nullGrades = "tidak ada data";
           listGrades=[-1];
           range = statPkm.kasus__max-statPkm.kasus__min;
@@ -412,15 +404,12 @@ console.log(qsClustering)
                 listGrades.push(i)
               }
             }
-          console.log(listGrades)
 	          var div = L.DomUtil.create('div', 'info legend'),
 	              grades = listGrades,
 	              labels = [],
 	              from, to;
             labels.push('<i style="background:' + getColorPkm(nullGrades) + '"></i> ' +
                     nullGrades);
-            console.log(grades)
-            console.log(grades.length)
 	          for (var i = 0; i < grades.length; i++) {
 	              from = grades[i];
 	              to = grades[i + 1];
@@ -439,7 +428,6 @@ console.log(qsClustering)
     var legendKec = L.control({position: 'bottomright'});
 
       legendKec.onAdd = function (map) {
-          console.log("Legenda kec")
           nullGrades = "tidak ada data";
           listGrades=[-1];
           range = statKec.kasus__max-statKec.kasus__min;
@@ -456,15 +444,12 @@ console.log(qsClustering)
                 listGrades.push(i)
               }
             }
-          console.log(listGrades)
             var div = L.DomUtil.create('div', 'info legend'),
                 grades = listGrades,
                 labels = [],
                 from, to;
             labels.push('<i style="background:' + getColorKec(nullGrades) + '"></i> ' +
                     nullGrades);
-            console.log(grades)
-            console.log(grades.length)
             for (var i = 0; i < grades.length; i++) {
                 from = grades[i];
                 to = grades[i + 1];
@@ -493,7 +478,6 @@ console.log(qsClustering)
 
   var info = L.control({position: 'bottomleft'});
 
-  console.log(qs.penyakit_query)
   optPenyakit = "Semua Penyakit"; 
   optGender = "Semua Jenis"; 
   optUmur = "Semua Umur"; 
@@ -509,7 +493,7 @@ console.log(qsClustering)
   
   if (qs.penyakit_query != "Semua Penyakit"){
     for (var i=0; i<qsClustering.length; i++){
-      optClust[i]=qsClustering[i].subkat
+      optClust[i]=qsClustering[i].subkat__nama_subkat
     }
   }
 

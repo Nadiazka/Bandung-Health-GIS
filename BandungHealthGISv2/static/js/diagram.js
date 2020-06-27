@@ -231,3 +231,32 @@ var myChart2 = new Chart(ctx, {
 		}
 	}
 })
+
+//Chart Kasus
+var ctx = document.getElementById("ChartKasus").getContext('2d');
+chartKasusLabel = chartKasus.keys();
+chartKasusData = chartKasus.values();
+
+var myChart2 = new Chart(ctx, {
+	type: 'pie',
+	data: {
+		labels: chartGenderLabel,
+		datasets: [{
+			label: 'Kasus',
+			data: chartGenderData,
+			backgroundColor: ['rgba(153, 102, 255, 0.2)', 'rgba(255, 99, 132, 0.2)'],
+          	borderColor: ['rgba(153, 102, 255, 1)', 'rgba(255,99,132,1)'],	
+			borderWidth: 1
+			}]
+		},
+	options: {
+		responsive : true,
+		legend: {
+				position: 'bottom',
+			},
+		title: {
+			display: true,
+			text: 'Gender Persentase'
+		}
+	}
+})

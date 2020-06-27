@@ -350,7 +350,8 @@ def index(request):
 		qsChartUmur = qs.values('kat_pasien__umur').annotate(kasus = Sum('kasus_baru')).order_by('-kasus')[:10]
 		qsChartGender =qs.values('kat_pasien__jenis_kelamin').annotate(kasus = Sum('kasus_baru'))
 		qsChartDate =qs.values('kode__tanggal').annotate(kasus = Sum('kasus_baru')).order_by('-kasus')[:10]
-		qsClustering = Klaster_Penyakit.objects.order_by('-llr')[:3].values('subkat','klaster_kode', 'klaster_nama', 'llr')
+		qsClustering = Klaster_Penyakit.objects.select_related('subkat')\
+		.order_by('-llr')[:3].values('subkat__nama_subkat','klaster_kode', 'klaster_nama', 'llr')
 
 		if is_valid_queryparam(penyakit_query):
 			if ICD10_Kategori.objects.filter(nama_kat__iexact=penyakit_query).exists():
@@ -376,7 +377,7 @@ def index(request):
 				.filter(
 					tanggal__gte=dateStart_query,
 					tanggal__lt=dateEnd_query,
-					subkat__icontains=kodePenyakit,
+					subkat=kodePenyakit,
 					jenis_kelamin=gender_query,
 					jenis_kasus=jenisKasus_query
 					)\
@@ -406,18 +407,21 @@ def index(request):
 				qsChartUmur = qs.values('kat_pasien__umur').annotate(kasus = Sum('kasus_baru')).order_by('-kasus')[:10]
 				qsChartGender =qs.values('kat_pasien__jenis_kelamin').annotate(kasus = Sum('kasus_baru'))
 				qsChartDate =qs.values('kode__tanggal').annotate(kasus = Sum('kasus_baru')).order_by('kasus')[:10]
+				qsChartKasus = qs.annotate(kasus_baru=Sum('kasus_baru'))
 			elif jenisKasus_query=="Kasus Lama":
 				qsPkm = qs.values('kode__kode_pkm', 'kode__kode_pkm__nama_pkm').annotate(kasus = Sum('kasus_lama'))
 				qsKec = qs.values('kode__kode_pkm__kode_kec', 'kode__kode_pkm__kode_kec__nama_kec').annotate(kasus = Sum('kasus_lama'))
 				qsChartUmur = qs.values('kat_pasien__umur').annotate(kasus = Sum('kasus_lama')).order_by('-kasus')[:10]
 				qsChartGender =qs.values('kat_pasien__jenis_kelamin').annotate(kasus = Sum('kasus_lama'))
 				qsChartDate =qs.values('kode__tanggal').annotate(kasus = Sum('kasus_lama')).order_by('kasus')[:10]
+				qsChartKasus = qs.annotate(kasus_lama=Sum('kasus_lama'))
 			elif jenisKasus_query=="Semua Jenis":
 				qsPkm = qs.values('kode__kode_pkm', 'kode__kode_pkm__nama_pkm').annotate(kasus=Sum('jumlah'))
 				qsKec = qs.values('kode__kode_pkm__kode_kec', 'kode__kode_pkm__kode_kec__nama_kec').annotate(kasus=Sum('jumlah'))
 				qsChartUmur = qs.values('kat_pasien__umur').annotate(kasus=Sum('jumlah')).order_by('-kasus')[:10]
 				qsChartGender =qs.values('kat_pasien__jenis_kelamin').annotate(kasus=Sum('jumlah'))
 				qsChartDate =qs.values('kode__tanggal').annotate(kasus=Sum('jumlah')).order_by('kasus')[:10]
+				qsChartKasus = qs.annotate(kasus_baru=Sum('kasus_baru'), kasus_lama=Sum('kasus_lama'))
 		
 			if "." in kodePenyakit:
 				if jenisKasus_query == "Kasus Baru":
@@ -462,6 +466,7 @@ def index(request):
 			'chartGender' : list(qsChartGender),
 			'chartUmur' : list(qsChartUmur),
 			'chartPeriode' : list(qsChartDate),
+			'chartKasus' : list(qsChartKasus),
 			'qsClustering' : list(qsClustering),
 			'qs' :query
 		}
@@ -489,7 +494,12 @@ def funcClustering(tgl):
 					jumlah_kasus=data.kasus,
 					klaster_kode=data.klaster_kode,
 					klaster_nama=data.klaster_nama,
-					llr=data.llr
+					jumlah_populasi = data.jumlah_populasi,
+					ekspektasi_kasus = data.ekspektasi_kasus,
+					smr = data.smr,
+					llr=data.llr,
+					rank = data.rank,
+					p_value = data.p_value
 					)
 
 	qsLooping = Jumlah_Kasus_Subkat.objects.select_related('kode__kode_pkm')\
@@ -523,28 +533,9 @@ def get_data(request):
 
 class DataClustering(View):
 	def get(self, request):
-		#qsGeodict = Kecamatan.objects.values('kode_kec', 'nama_kec', 'lat', 'longt')
-		#qsDatadict = Kecamatan.objects.values('kode_kec', 'nama_kec', 'jml_pddk', 'pddk_l', 'pddk_p')
-		qsSubkat = ICD10_Subkategori.objects.values('subkat')
-		tgl = Indeks.objects.values('tanggal').order_by('tanggal').distinct()[11]['tanggal']
-		qsLooping = Jumlah_Kasus_Subkat.objects.select_related('kode__kode_pkm')\
-		.filter(kode__tanggal=tgl)\
-		.values('kode__tanggal', 'kode__kode_pkm__kode_kec', 'icd_10')\
-		.annotate(
-			baru_l=Sum('jumlah_baru_l'),
-			baru_p=Sum('jumlah_baru_p'), 
-			lama_l=Sum('jumlah_lama_l'), 
-			lama_p=Sum('jumlah_lama_p'), 
-			baru=Sum(F('jumlah_baru_l')+F('jumlah_baru_p')), 
-			lama=Sum(F('jumlah_lama_l')+F('jumlah_lama_p')), 
-			l=Sum(F('jumlah_baru_l')+F('jumlah_lama_l')), 
-			p=Sum(F('jumlah_baru_p')+F('jumlah_lama_p')), 
-			jumlah=Sum('jumlah'))
+		qsMasterdict = Kecamatan.objects.all()
 		data ={
-			#'Geodict' : list(qsGeodict),
-			#'Datadict' : list(qsDatadict),
-			#'Subkat' : list(qsSubkat),
-			'qsHasil' : list(qsLooping)
+			'qsHasil' : list(qsMasterdict)
 		}
 		return JsonResponse(data)
 		

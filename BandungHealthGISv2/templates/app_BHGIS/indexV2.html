@@ -107,7 +107,7 @@
                     Periode : Pilih jenis rentang periode yang ingin ditampilkan. Gunakan awal bulan di setiap masukannya (01/mm/yyy)
                   </li>
                   <li>
-                    Jenis Kasus : Pilih jenis kasus yang ingin ditampilkan. Pilih "Semua Jenis" untuk menampilkan keseluruhan data, "Kasus Lama" untuk kasus yang sudah pernah muncul di periode sebelumnya, dan "Kasus Baru" untuk kasus yang baru muncul di periode waktu tertentu.
+                    Jenis Kasus : Pilih jenis kasus yang ingin ditampilkan. Jenis kasus didefinisikan dalam periode 1 bulan. "Kasus Baru" merupakan kasus yang baru muncul di bulan tertentu, sementara "Kasus Lama" merupakan kasus yang sudah pernah muncul di sebelum bulan yang ditentukan. Selain itu, pilih "Semua Jenis" untuk menampilkan keseluruhan data.
                   </li>
                 </ul>
                 <strong>Open Analysis</strong><br>
@@ -267,6 +267,8 @@
         console.log(chartUmur)
         var chartPeriode = {{chartPeriode|json}}
         console.log(chartPeriode)
+        var chartKasus = {{chartKasus|json}}
+        console.log(chartKasus)
         var qsClustering = {{qsClustering|json}}
         console.log(qsClustering)
         var qs = {{qs|json}}
@@ -301,11 +303,9 @@
         <div class="col-md-6" style="height=5px;">
           <canvas id="ChartPeriode"></canvas>
         </div>
-        <!--
         <div class="col-md-6" style="height=5px;">
           <canvas id="ChartKasus"></canvas>
         </div>
-      -->
         <div class="col-md-6" id="closeAnalisisBtn">
           <button class="btn2 btn-info">Close Analysis</button>
         </div>
