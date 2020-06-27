@@ -396,9 +396,7 @@ def index(request):
 
 		if is_valid_queryparam(dateEnd_query):
 			qs = qs.filter(kode__tanggal__lt=dateEnd_query)
-			tempEndDate = Indeks.objects.filter(tanggal__lt=dateEnd_query)\
-			.order_by('-tanggal')[0]['tanggal']
-			#tempEndDate2 = datetime.strptime(tempEndDate1, '%Y-%m-%d').date()
+			tempEndDate2 = datetime.strptime(tempEndDate1, '%Y-%m-%d').date()
 			endPeriode = last_day_of_month(tempEndDate)
 
 		if is_valid_queryparam(jenisKasus_query):

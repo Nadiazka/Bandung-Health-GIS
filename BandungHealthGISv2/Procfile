@@ -1,1 +1,1 @@
-web: gunicorn BandungHealthGISv2.wsgi --log-file -
+web: gunicorn BandungHealthGISv2.wsgi --log-file --timeout 180 --preload -
