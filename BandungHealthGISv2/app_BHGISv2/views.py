@@ -350,6 +350,7 @@ def index(request):
 		qsChartUmur = qs.values('kat_pasien__umur').annotate(kasus = Sum('kasus_baru')).order_by('-kasus')[:10]
 		qsChartGender =qs.values('kat_pasien__jenis_kelamin').annotate(kasus = Sum('kasus_baru'))
 		qsChartDate =qs.values('kode__tanggal').annotate(kasus = Sum('kasus_baru')).order_by('-kasus')[:10]
+		qsClustering = Klaster_Penyakit.objects.order_by('-llr')[:3].values('subkat','klaster_kode', 'klaster_nama', 'llr')
 
 		if is_valid_queryparam(penyakit_query):
 			if ICD10_Kategori.objects.filter(nama_kat__iexact=penyakit_query).exists():
@@ -368,6 +369,19 @@ def index(request):
 			else:
 				qs = Jumlah_Kategori.objects.select_related('kode__kode_pkm')\
 				.filter(kat=kodePenyakit)
+
+			#Clustering
+			if kodePenyakit != "Semua Penyakit":
+				qsClustering = Klaster_Penyakit.objects\
+				.filter(
+					tanggal__gte=dateStart_query,
+					tanggal__lt=dateEnd_query,
+					subkat__icontains=kodePenyakit,
+					jenis_kelamin=gender_query,
+					jenis_kasus=jenisKasus_query
+					)\
+				.order_by('-llr')[:3]\
+				.values('subkat','klaster_kode', 'klaster_nama', 'llr')
 		
 		if is_valid_queryparam(gender_query) and gender_query != "Semua Jenis":
 			qs = qs.filter(kat_pasien__jenis_kelamin__iexact=gender_query)
@@ -426,19 +440,6 @@ def index(request):
 		qsChartKec = qsKec.order_by('-kasus')[:10]
 		distNormPkm = qsPkm.aggregate(Max('kasus'), Min('kasus'))
 		distNormKec = qsKec.aggregate(Max('kasus'), Min('kasus'))
-
-		#Clustering
-		if kodePenyakit != "Semua Penyakit":
-			qsClustering = Klaster_Penyakit.objects\
-			.filter(
-				tanggal__gte=dateStart_query,
-				tanggal__lt=dateEnd_query,
-				subkat__icontains=kodePenyakit,
-				jenis_kelamin=gender_query,
-				jenis_kasus=jenisKasus_query
-				)\
-			.order_by('-llr')[:3]\
-			.values('subkat','klaster_kode', 'klaster_nama', 'llr')
 
 		startPeriode = startPeriode.strftime('%d/%m/%y')
 		endPeriode= endPeriode.strftime('%d/%m/%y')

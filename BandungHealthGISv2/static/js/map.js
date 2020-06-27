@@ -246,10 +246,11 @@ $.getJSON(URLtpkm,function(data){
   });
 
 //Clustering
+console.log(qsClustering)
   var Clustering1 = L.layerGroup();
-  //var dataClustering1 = qsClustering[0].klaster_kode
-  var dataClustering1 = ["3273030", "3273020"]
-/*
+  var dataClustering1 = qsClustering[0].klaster_kode
+  //var dataClustering1 = ["3273030", "3273020"]
+
   function highlightFeatureClstr1(e) {
     var out = [];
     out.push("Kecamatan : "+qsClustering[0].klaster_nama);
@@ -269,7 +270,7 @@ $.getJSON(URLtpkm,function(data){
         click: zoomToFeature
     });
   }
-  */
+  
   $.getJSON(URLkec,function(data){
       console.log(data);
       for (var i = 0; i < dataClustering1.length; i++) {
@@ -287,9 +288,9 @@ $.getJSON(URLtpkm,function(data){
     });
 
   var Clustering2 = L.layerGroup();
-  //var dataClustering2 = qsClustering[1].klaster_kode
-  var dataClustering2 = ["3273141", "3273142"]
-  /*
+  var dataClustering2 = qsClustering[1].klaster_kode
+  //var dataClustering2 = ["3273141", "3273142"]
+  
   function highlightFeatureClstr2(e) {
     var out = [];
     out.push("Kecamatan : "+qsClustering[1].klaster_nama);
@@ -309,7 +310,7 @@ $.getJSON(URLtpkm,function(data){
         click: zoomToFeature
     });
   }
-  */
+  
   $.getJSON(URLkec,function(data){
       console.log(data);
       for (var i = 0; i < dataClustering2.length; i++) {
@@ -327,9 +328,9 @@ $.getJSON(URLtpkm,function(data){
     });
 
   var Clustering3 = L.layerGroup();
-  //var dataClustering3 = qsClustering[2].klaster_kode
+  var dataClustering3 = qsClustering[2].klaster_kode
   var dataClustering3 = ["3273200", "3273210"]
-  /*
+  
   function highlightFeatureClstr3(e) {
     var out = [];
     out.push("Kecamatan : "+qsClustering[2].klaster_nama);
@@ -349,7 +350,7 @@ $.getJSON(URLtpkm,function(data){
         click: zoomToFeature
     });
   }
-  */
+  
   $.getJSON(URLkec,function(data){
       console.log(data);
       for (var i = 0; i < dataClustering3.length; i++) {
@@ -505,12 +506,12 @@ $.getJSON(URLtpkm,function(data){
     optPenyakit = qs.penyakit_query
   }
   console.log(optPenyakit)
-  /*
+  
   if (qs.penyakit_query != "Semua Penyakit"){
     for (var i=0; i<qsClustering.length; i++){
       optClust[i]=qsClustering[i].subkat
     }
-  }*/
+  }
 
   if (qs.gender_query != null && qs.gender_query != undefined){
     optGender = qs.gender_query

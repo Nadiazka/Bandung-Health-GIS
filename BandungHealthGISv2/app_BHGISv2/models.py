@@ -148,10 +148,15 @@ class Klaster_Penyakit(SoftDeleteModel):
 	subkat = models.ForeignKey(ICD10_Subkategori, related_name='Klaster_Penyakit', on_delete=models.CASCADE)
 	jenis_kelamin = models.CharField(max_length=14)
 	jenis_kasus = models.CharField(max_length=14)
-	jumlah_kasus = models.PositiveSmallIntegerField()
+	jumlah_kasus = models.PositiveIntegerField()
 	klaster_kode = models.CharField(max_length=69)
 	klaster_nama = models.CharField(max_length=79)
-	llr = models.PositiveSmallIntegerField()
+	jumlah_populasi = models.IntegerField()
+	ekspektasi_kasus = models.FloatField()
+	smr = models.FloatField(max_length=2)
+	llr = models.PositiveSmallIntegerField(max_length=2)
+	rank = models.FloatField(max_length=2)
+	p_value = models.FloatField(max_length=5)
 
 	def __str__(self):
 		return str(self.tanggal)

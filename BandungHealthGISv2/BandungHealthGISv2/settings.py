@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
-import dj_database_url
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -95,32 +95,17 @@ WSGI_APPLICATION = 'BandungHealthGISv2.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME' : 'bhgisv7',
-        'USER' :'root',
-        'PASSWORD' :'miayam5.000',
-        'HOST' :'localhost',
+        'NAME' : 'wqaf7kilxfv4jlc3',
+        'USER' :'wxb6rudewykwaud3',
+        'PASSWORD' :'ewp811wvmt22qa1o',
+        'HOST' :'rtzsaka6vivj2zp1.cbetxkdyhwsb.us-east-1.rds.amazonaws.com',
         'PORT' : '3306',
         'OPTIONS':{
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
         }
     }
 }
-"""
-#heroku
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME' : 'bhgisv7',
-        'USER' :'root',
-        'PASSWORD' :'miayam5.000',
-        'HOST' :'localhost',
-        'PORT': '5432'
-    }
-}
 
-db_from_env = dj_database_url.config(conn_max_age=500)
-DATABASES['default'].update(db_from_env)
-"""
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
 
