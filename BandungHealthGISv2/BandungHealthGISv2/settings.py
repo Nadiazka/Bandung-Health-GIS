@@ -92,6 +92,7 @@ WSGI_APPLICATION = 'BandungHealthGISv2.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 #local
+"""
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -105,7 +106,20 @@ DATABASES = {
         }
     }
 }
-
+"""
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME' : 'kfndlkyqo4vm1dss',
+        'USER' :'fjrz4r5lupwbu3kz',
+        'PASSWORD' :'e90tkhqq1qs011s0',
+        'HOST' :'otmaa16c1i9nwrek.cbetxkdyhwsb.us-east-1.rds.amazonaws.com',
+        'PORT' : '3306',
+        'OPTIONS':{
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
+        }
+    }
+}
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
 
