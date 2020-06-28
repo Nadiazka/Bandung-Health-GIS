@@ -234,8 +234,8 @@ var myChart2 = new Chart(ctx, {
 
 //Chart Kasus
 var ctx = document.getElementById("ChartKasus").getContext('2d');
-chartKasusLabel = chartKasus.keys();
-chartKasusData = chartKasus.values();
+chartKasusLabel = Object.keys(chartKasus);
+chartKasusData = Object.values(chartKasus);
 
 var myChart2 = new Chart(ctx, {
 	type: 'pie',

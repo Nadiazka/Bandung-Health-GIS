@@ -409,7 +409,7 @@ def index(request):
 			'chartGender' : list(qsChartGender),
 			'chartUmur' : list(qsChartUmur),
 			'chartPeriode' : list(qsChartDate),
-			'chartKasus' : list(qsChartKasus),
+			'chartKasus' : qsChartKasus,
 			'qsClustering' : list(qsClustering),
 			'qs' :query
 		}
