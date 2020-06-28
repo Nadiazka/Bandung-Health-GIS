@@ -240,10 +240,10 @@ chartKasusData = chartKasus.values();
 var myChart2 = new Chart(ctx, {
 	type: 'pie',
 	data: {
-		labels: chartGenderLabel,
+		labels: chartKasusLabel,
 		datasets: [{
 			label: 'Kasus',
-			data: chartGenderData,
+			data: chartKasusData,
 			backgroundColor: ['rgba(153, 102, 255, 0.2)', 'rgba(255, 99, 132, 0.2)'],
           	borderColor: ['rgba(153, 102, 255, 1)', 'rgba(255,99,132,1)'],	
 			borderWidth: 1
@@ -256,7 +256,7 @@ var myChart2 = new Chart(ctx, {
 			},
 		title: {
 			display: true,
-			text: 'Gender Persentase'
+			text: 'Persentase Kasus'
 		}
 	}
 })

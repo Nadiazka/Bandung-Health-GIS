@@ -243,7 +243,11 @@ $.getJSON(URLtpkm,function(data){
 
 //Clustering
 console.log(qsClustering)
-  var Clustering1 = L.layerGroup();
+var Clustering1 = L.layerGroup();
+var Clustering2 = L.layerGroup();
+var Clustering3 = L.layerGroup();
+
+if (qsClustering[0] != null && qsClustering[0] != undefined ){
   var dataClustering1 = qsClustering[0].klaster_kode
 
   function highlightFeatureClstr1(e) {
@@ -281,8 +285,9 @@ console.log(qsClustering)
     }
       console.log("clustering aman")
     });
+}
 
-  var Clustering2 = L.layerGroup();
+if (qsClustering[1] != null && qsClustering[1] != undefined ){
   var dataClustering2 = qsClustering[1].klaster_kode
   
   function highlightFeatureClstr2(e) {
@@ -320,8 +325,9 @@ console.log(qsClustering)
     }
       console.log("clustering aman")
     });
-
-  var Clustering3 = L.layerGroup();
+}
+  
+if (qsClustering[2] != null && qsClustering[2] != undefined ){
   var dataClustering3 = qsClustering[2].klaster_kode
   
   function highlightFeatureClstr3(e) {
@@ -359,7 +365,7 @@ console.log(qsClustering)
     }
       console.log("clustering aman")
     });
-
+}
 
 // Gathering all layer
 	var map = L.map('map', {
