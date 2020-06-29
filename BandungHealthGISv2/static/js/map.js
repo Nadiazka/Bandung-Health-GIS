@@ -289,7 +289,7 @@ if (qsClustering[0] != null && qsClustering[0] != undefined ){
 }
 
 if (qsClustering[1] != null && qsClustering[1] != undefined ){
-  var dataClustering2 = qsClustering[1].klaster_kode
+  var dataClustering2 = [qsClustering[1].klaster_kode]
   console.log(dataClustering2)
   function highlightFeatureClstr2(e) {
     var out = [];
@@ -329,7 +329,7 @@ if (qsClustering[1] != null && qsClustering[1] != undefined ){
 }
   
 if (qsClustering[2] != null && qsClustering[2] != undefined ){
-  var dataClustering3 = qsClustering[2].klaster_kode
+  var dataClustering3 = [qsClustering[2].klaster_kode]
   console.log(dataClustering3)
   
   function highlightFeatureClstr3(e) {
