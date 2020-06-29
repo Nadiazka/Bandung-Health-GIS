@@ -473,17 +473,14 @@ def get_data(request):
 	.annotate(kasus = Sum('kasus_baru'))
 	response = json.dumps(list(data))
 	"""
-	response = json.dumps(list(qsFiltering))
+	qsMasterdict = Kecamatan.objects.all()
+	response = json.dumps(list(qsMasterdict))
 	return HttpResponse(response)
 
-class DataClustering(View):
-	def get(self, request):
-		qsMasterdict = Kecamatan.objects.all()
-		data ={
-			'qsHasil' : list(qsMasterdict)
-		}
-		return JsonResponse(data)
-
+class DataClustering(generics.ListCreateAPIView):
+	queryset = Kecamatan.objects.all()
+	serializer_class = KecamatanSerializer2
+		
 class PenyakitSubkat(generics.ListCreateAPIView):
 	queryset = ICD10_Subkategori.objects.values('nama_subkat')
 	serializer_class = ICD10_SubkategoriSerializer2

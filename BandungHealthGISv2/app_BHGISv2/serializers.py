@@ -22,5 +22,10 @@ class ICD10_KategoriSerializer2(serializers.ModelSerializer):
  		model = ICD10_Kategori
  		fields = ['nama_kat']
 
+class KecamatanSerializer2(serializers.ModelSerializer):
+	class Meta:
+		model = Kecamatan
+		fields = '__all__'
+
 			
 		

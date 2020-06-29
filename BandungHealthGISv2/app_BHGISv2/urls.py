@@ -4,7 +4,7 @@ from rest_framework.routers import DefaultRouter
 
 urlpatterns =[
 	url(r'^$', views.index, name='index'),
-	url(r'^data/graph/', views.get_data, name='dataGraph'),
+	url(r'^data/', views.get_data),
 	url(r'^dataFiltering/', views.dataFiltering.as_view()),
 	url(r'^PenyakitSubkat/', views.PenyakitSubkat.as_view()),
 	url(r'^PenyakitKat/', views.PenyakitKat.as_view()),
