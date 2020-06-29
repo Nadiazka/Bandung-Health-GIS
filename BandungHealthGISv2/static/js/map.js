@@ -248,7 +248,8 @@ var Clustering2 = L.layerGroup();
 var Clustering3 = L.layerGroup();
 
 if (qsClustering[0] != null && qsClustering[0] != undefined ){
-  var dataClustering1 = qsClustering[0].klaster_kode
+  var dataClustering1 = [qsClustering[0].klaster_kode]
+  console.log(dataClustering1)
 
   function highlightFeatureClstr1(e) {
     var out = [];
@@ -289,7 +290,7 @@ if (qsClustering[0] != null && qsClustering[0] != undefined ){
 
 if (qsClustering[1] != null && qsClustering[1] != undefined ){
   var dataClustering2 = qsClustering[1].klaster_kode
-  
+  console.log(dataClustering2)
   function highlightFeatureClstr2(e) {
     var out = [];
     out.push("Kecamatan : "+qsClustering[1].klaster_nama);
@@ -329,6 +330,7 @@ if (qsClustering[1] != null && qsClustering[1] != undefined ){
   
 if (qsClustering[2] != null && qsClustering[2] != undefined ){
   var dataClustering3 = qsClustering[2].klaster_kode
+  console.log(dataClustering3)
   
   function highlightFeatureClstr3(e) {
     var out = [];

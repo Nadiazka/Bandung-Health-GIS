@@ -424,6 +424,7 @@ class dataFiltering(View):
 def funcClustering(tgl):
 	#urlOutput = requests.get('https://ssdsd')
 	#dataOutput = urlOutput.json()
+	"""
 	dataOutput ={} 
 	if dataOutput is not None:
 		tanggal = dataOutput[0].tanggal
@@ -444,9 +445,10 @@ def funcClustering(tgl):
 					rank = data.rank,
 					p_value = data.p_value
 					)
-
+	"""
+	tanggal = Indeks.objects.values('tanggal').order_by('tanggal')[0]['tanggal']
 	qsLooping = Jumlah_Kasus_Subkat.objects.select_related('kode__kode_pkm')\
-		.filter(kode__tanggal=tgl)\
+		.filter(kode__tanggal=tanggal)\
 		.values('kode__tanggal', 'kode__kode_pkm__kode_kec', 'icd_10')\
 		.annotate(
 			baru_l=Sum('jumlah_baru_l'),
@@ -481,7 +483,7 @@ class DataClustering(View):
 			'qsHasil' : list(qsMasterdict)
 		}
 		return JsonResponse(data)
-		
+
 class PenyakitSubkat(generics.ListCreateAPIView):
 	queryset = ICD10_Subkategori.objects.values('nama_subkat')
 	serializer_class = ICD10_SubkategoriSerializer2
