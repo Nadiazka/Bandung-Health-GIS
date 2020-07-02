@@ -162,6 +162,7 @@ $.ajax({
 var LayerKec = L.layerGroup();
 
 function styleKec(feature) {
+  console.log(feature.properties.kode_kode)
   return {
         fillColor: getColorKec(dataKecamatan[feature.properties.kode_kode].kasus),
         weight: 2,

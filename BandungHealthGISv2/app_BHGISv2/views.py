@@ -296,18 +296,11 @@ def index(request):
 		qsChartKasus = qs.aggregate(Kasus_Baru=Sum('kasus_baru'), Kasus_Lama=Sum('kasus_lama'))
 		print(qsChartKasus)
 
-		if is_valid_queryparam(penyakit_query):
-			if ICD10_Kategori.objects.filter(nama_kat__iexact=penyakit_query).exists():
-				kodePenyakit = ICD10_Kategori.objects.filter(nama_kat__iexact=penyakit_query).values('kat')[0]['kat']
-			elif ICD10_Subkategori.objects.filter(nama_subkat__iexact=penyakit_query).exists():
-				kodePenyakit = ICD10_Subkategori.objects.filter(nama_subkat__iexact=penyakit_query).values('subkat')[0]['subkat']
-			else:
-				kodePenyakit = "Semua Penyakit"
-			print(kodePenyakit)
+		if is_valid_queryparam(penyakit_query) and penyakit_query!= "Semua Penyakit":
+			splitKodePenyakit = penyakit_query.split(":")
+			kodePenyakit = splitKodePenyakit[0]
 
-			if kodePenyakit == "Semua Penyakit" :
-				qs = Jumlah_Kategori.objects.select_related('kode__kode_pkm')
-			elif "." in kodePenyakit:
+			if "." in kodePenyakit:
 				qs = Kasus.objects.select_related('kode__kode_pkm')\
 				.filter(icd_10=kodePenyakit)
 			else:
@@ -315,18 +308,20 @@ def index(request):
 				.filter(kat=kodePenyakit)
 
 			#Clustering
-			if kodePenyakit != "Semua Penyakit":
-				qsClustering = Klaster_Penyakit.objects\
-				.filter(
-					tanggal__gte=dateStart_query,
-					tanggal__lt=dateEnd_query,
-					subkat=kodePenyakit,
-					jenis_kelamin=gender_query,
-					jenis_kasus=jenisKasus_query
-					)\
-				.order_by('-llr')[:3]\
-				.values('subkat','klaster_kode', 'klaster_nama', 'llr')
-		
+			qsClustering = Klaster_Penyakit.objects\
+			.filter(
+				tanggal__gte=dateStart_query,
+				tanggal__lt=dateEnd_query,
+				subkat=kodePenyakit,
+				jenis_kelamin=gender_query,
+				jenis_kasus=jenisKasus_query
+				)\
+			.order_by('-llr')[:3]\
+			.values('subkat','klaster_kode', 'klaster_nama', 'llr')
+
+		elif penyakit_query == "Semua Penyakit":
+			qs = Jumlah_Kategori.objects.select_related('kode__kode_pkm')
+			
 		if is_valid_queryparam(gender_query) and gender_query != "Semua Jenis":
 			qs = qs.filter(kat_pasien__jenis_kelamin__iexact=gender_query)
 
@@ -482,11 +477,11 @@ class DataClustering(generics.ListCreateAPIView):
 	serializer_class = KecamatanSerializer2
 		
 class PenyakitSubkat(generics.ListCreateAPIView):
-	queryset = ICD10_Subkategori.objects.values('nama_subkat')
+	queryset = ICD10_Subkategori.objects.values('subkat','nama_subkat')
 	serializer_class = ICD10_SubkategoriSerializer2
 
 class PenyakitKat(generics.ListCreateAPIView):
-	queryset = ICD10_Kategori.objects.values('nama_kat')
+	queryset = ICD10_Kategori.objects.values('kat','nama_kat')
 	serializer_class = ICD10_KategoriSerializer2
 
 class Puskesmas(generics.ListCreateAPIView):

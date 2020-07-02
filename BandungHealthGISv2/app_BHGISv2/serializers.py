@@ -15,12 +15,12 @@ class PuskesmasSerializer(serializers.ModelSerializer):
 class ICD10_SubkategoriSerializer2(serializers.ModelSerializer):
  	class Meta:
  		model = ICD10_Subkategori
- 		fields = ['nama_subkat']
+ 		fields = ['subkat','nama_subkat']
 
 class ICD10_KategoriSerializer2(serializers.ModelSerializer):
  	class Meta:
  		model = ICD10_Kategori
- 		fields = ['nama_kat']
+ 		fields = ['kat','nama_kat']
 
 class KecamatanSerializer2(serializers.ModelSerializer):
 	class Meta:

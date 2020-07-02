@@ -108,17 +108,21 @@ $(document).ready(function(){
     url: '/PenyakitSubkat/',
     success: function(data){
       for (var i = 0; i < data.length; i++) {
-                subkat[i] = data[i].nama_subkat;
+                tempSubkat = (data[i].subkat).concat(": ");
+                subkat[i] = tempSubkat.concat(data[i].nama_subkat);
             };
+      console.log(subkat)
       $.ajax({
         method: "GET",
         url: '/PenyakitKat/',
         success: function(dataKat){
           for (var i = 0 ; i < dataKat.length ; i++) {
-                    kat[i]=dataKat[i].nama_kat;
+                    tempKat = (dataKat[i].kat).concat(": ");
+                    kat[i]=tempKat.concat(dataKat[i].nama_kat);
                     penyakit=subkat.concat(kat);
                 };
                 autocomplete(document.getElementById("InputPnykt"), penyakit);
+          console.log(penyakit)
         },
         error: function(error_data){
             console.log("error")
