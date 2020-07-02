@@ -147,7 +147,6 @@ $.ajax({
 var LayerKec = L.layerGroup();
 
 function styleKec(feature) {
-  console.log(feature.properties.kode_kode)
   return {
         fillColor: getColorKec(dataKecamatan[feature.properties.kode_kode].kasus),
         weight: 2,
@@ -265,7 +264,7 @@ if (qsClustering[0] != null && qsClustering[0] != undefined ){
             if (feature.properties.kode_kode=== dataClustering1[i]) return true
           },
           style : function(feature){
-            if (feature.properties.kode_kode=== dataClustering1[i]) return {color: "#995bbe"};
+            if (feature.properties.kode_kode=== dataClustering1[i]) return {color: "#1e0505"};
           },
           onEachFeature: onEachFeatureClstr1
         }).addTo(Clustering1);
@@ -305,7 +304,7 @@ if (qsClustering[1] != null && qsClustering[1] != undefined ){
             if (feature.properties.kode_kode=== dataClustering2[i]) return true
           },
           style : function(feature){
-            if (feature.properties.kode_kode=== dataClustering2[i]) return {color: "#ce6fac"};
+            if (feature.properties.kode_kode=== dataClustering2[i]) return {color: "#472103"};
           },
           onEachFeature: onEachFeatureClstr2
         }).addTo(Clustering2);
@@ -346,7 +345,7 @@ if (qsClustering[2] != null && qsClustering[2] != undefined ){
             if (feature.properties.kode_kode=== dataClustering3[i]) return true
           },
           style : function(feature){
-            if (feature.properties.kode_kode=== dataClustering3[i]) return {color: "#ffc0cb"};
+            if (feature.properties.kode_kode=== dataClustering3[i]) return {color: "#403803"};
           },
           onEachFeature: onEachFeatureClstr3
         }).addTo(Clustering3);
