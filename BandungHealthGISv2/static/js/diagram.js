@@ -1,5 +1,3 @@
-console.log("Diagram js masuk")
-
 //Diagram Puskesmas
 var ctx = document.getElementById("ChartPkm").getContext('2d');
 chartPkmLabel = [];
@@ -90,7 +88,6 @@ for (var i = 0; i < chartPenyakit.length; i++) {
     ;
     chartPenyakitData[i]=chartPenyakit[i].kasus
   };
-  console.log(chartPenyakitLabel)
 var myChartPnykt = new Chart(cPnykt, {
   type: 'bar',
   data: {

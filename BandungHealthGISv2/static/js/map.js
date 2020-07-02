@@ -18,21 +18,6 @@ URLkec = "https://raw.githubusercontent.com/Nadiazka/Bandung-Health-GIS/master/B
 URLtpkm = "https://raw.githubusercontent.com/Nadiazka/Bandung-Health-GIS/master/BandungHealthGISv2/static/data/titikPkm.geojson";
 */
 
-// get Kecamatan
-kec = {}
-$.ajax({
-    method: "GET",
-    url: '/Kecamatan/',
-    success: function(data){
-      for (var i = 0 ; i < data.length ; i++) {
-                kec[data[i].kode_kec] = {"area" : data[i].nama_kec, "kasus" :"-"};
-            };
-    },
-    error: function(error_data){
-        console.log("error")
-      }
-    });
-
 //general fitur
 function resetHighlight(e) {
 	var layer = e.target;
@@ -280,7 +265,7 @@ if (qsClustering[0] != null && qsClustering[0] != undefined ){
             if (feature.properties.kode_kode=== dataClustering1[i]) return true
           },
           style : function(feature){
-            if (feature.properties.kode_kode=== dataClustering1[i]) return {color: "#ff0000"};
+            if (feature.properties.kode_kode=== dataClustering1[i]) return {color: "#995bbe"};
           },
           onEachFeature: onEachFeatureClstr1
         }).addTo(Clustering1);
@@ -320,7 +305,7 @@ if (qsClustering[1] != null && qsClustering[1] != undefined ){
             if (feature.properties.kode_kode=== dataClustering2[i]) return true
           },
           style : function(feature){
-            if (feature.properties.kode_kode=== dataClustering2[i]) return {color: "#ff0000"};
+            if (feature.properties.kode_kode=== dataClustering2[i]) return {color: "#ce6fac"};
           },
           onEachFeature: onEachFeatureClstr2
         }).addTo(Clustering2);
@@ -361,7 +346,7 @@ if (qsClustering[2] != null && qsClustering[2] != undefined ){
             if (feature.properties.kode_kode=== dataClustering3[i]) return true
           },
           style : function(feature){
-            if (feature.properties.kode_kode=== dataClustering3[i]) return {color: "#ff0000"};
+            if (feature.properties.kode_kode=== dataClustering3[i]) return {color: "#ffc0cb"};
           },
           onEachFeature: onEachFeatureClstr3
         }).addTo(Clustering3);

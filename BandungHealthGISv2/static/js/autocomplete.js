@@ -111,7 +111,6 @@ $(document).ready(function(){
                 tempSubkat = (data[i].subkat).concat(": ");
                 subkat[i] = tempSubkat.concat(data[i].nama_subkat);
             };
-      console.log(subkat)
       $.ajax({
         method: "GET",
         url: '/PenyakitKat/',
@@ -122,7 +121,6 @@ $(document).ready(function(){
                     penyakit=subkat.concat(kat);
                 };
                 autocomplete(document.getElementById("InputPnykt"), penyakit);
-          console.log(penyakit)
         },
         error: function(error_data){
             console.log("error")
