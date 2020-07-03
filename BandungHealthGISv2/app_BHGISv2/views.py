@@ -412,14 +412,9 @@ def index(request):
 
 	return render (request, 'app_BHGIS/indexV2.html')
 
-class dataFiltering(View):
-	def get(self, request):
-		return JsonResponse(iClustering)
-
 def funcClustering(tgl):
 	#urlOutput = requests.get('https://ssdsd')
 	#dataOutput = urlOutput.json()
-	"""
 	dataOutput ={} 
 	if dataOutput is not None:
 		tanggal = dataOutput[0].tanggal
@@ -440,7 +435,6 @@ def funcClustering(tgl):
 					rank = data.rank,
 					p_value = data.p_value
 					)
-	"""
 	tanggal = Indeks.objects.values('tanggal').order_by('tanggal')[0]['tanggal']
 	qsLooping = Jumlah_Kasus_Subkat.objects.select_related('kode__kode_pkm')\
 		.filter(kode__tanggal=tanggal)\
@@ -460,18 +454,6 @@ def funcClustering(tgl):
 	}
 	return JsonResponse(data)
 
-		
-def get_data(request):
-	"""
-	data = Kasus.objects.select_related('kode__kode_pkm')\
-	.values('kode__kode_pkm', 'kode__kode_pkm__nama_pkm')\
-	.annotate(kasus = Sum('kasus_baru'))
-	response = json.dumps(list(data))
-	"""
-	qsMasterdict = Kecamatan.objects.all()
-	response = json.dumps(list(qsMasterdict))
-	return HttpResponse(response)
-
 class DataClustering(generics.ListCreateAPIView):
 	queryset = Kecamatan.objects.all()
 	serializer_class = KecamatanSerializer2
@@ -483,11 +465,3 @@ class PenyakitSubkat(generics.ListCreateAPIView):
 class PenyakitKat(generics.ListCreateAPIView):
 	queryset = ICD10_Kategori.objects.values('kat','nama_kat')
 	serializer_class = ICD10_KategoriSerializer2
-
-class Puskesmas(generics.ListCreateAPIView):
-	queryset = Puskesmas.objects.values('kode_pkm', 'nama_pkm').order_by('nama_pkm')
-	serializer_class = PuskesmasSerializer
-
-class Kecamatan(generics.ListCreateAPIView):
-	queryset = Kecamatan.objects.values('kode_kec', 'nama_kec').order_by('nama_kec')
-	serializer_class = KecamatanSerializer

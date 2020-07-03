@@ -37,23 +37,17 @@ function zoomToFeature(e) {
 
 //Puskesmas
 dataPkm = {}
-dataPuskesmas = {}
-$.ajax({
-    method: "GET",
-    url: '/Puskesmas/',
-    success: function(data){
-      for (var i = 0; i < data.length; i++) {
-        dataPuskesmas[data[i].kode_pkm] = {"area" : data[i].nama_pkm, "kasus" :"tidak ada data "};
-      };
-      for (var i = 0; i < areaPkm.length; i++) {
-        dataPkm[areaPkm[i].kode__kode_pkm] = {"area" : areaPkm[i].kode__kode_pkm__nama_pkm, "kasus" : areaPkm[i].kasus};
-      };
-      $.extend(dataPuskesmas, dataPkm)
-    },
-    error: function(error_data){
-        console.log("error")
-      }
-    });
+dataPuskesmas={}
+URLdataPuskesmas = "static/data/dataPuskesmas.json";
+$.getJSON(URLdataPuskesmas, function(data){
+  for (var i = 0; i < areaPkm.length; i++) {
+    dataPkm[areaPkm[i].kode__kode_pkm] = {
+      "area" : areaPkm[i].kode__kode_pkm__nama_pkm,
+      "kasus" : areaPkm[i].kasus
+    };
+  };
+  dataPuskesmas = $.extend(data, dataPkm)
+})
 
 var LayerPkm = L.layerGroup();
 
@@ -124,25 +118,17 @@ $.getJSON(URLpkm,function(data){
 //Kecamatan
 dataKec = {}
 dataKecamatan = {}
-$.ajax({
-    method: "GET",
-    url: '/Kecamatan/',
-    success: function(data){
-      for (var i = 0; i < data.length; i++) {
-        dataKecamatan[data[i].kode_kec] = {"area" : data[i].nama_kec, "kasus" :"tidak ada data "};
-      };
-      for (var i = 0; i < areaKec.length; i++) {
-        dataKec[areaKec[i].kode__kode_pkm__kode_kec] = {
-          "area" : areaKec[i].kode__kode_pkm__kode_kec__nama_kec, 
-          "kasus" : areaKec[i].kasus
-        };
-      };
-      $.extend(dataKecamatan, dataKec)
-    },
-    error: function(error_data){
-        console.log("error")
-      }
-    });
+URLdataKecamatan = "static/data/dataKecamatan.json";
+$.getJSON(URLdataKecamatan, function(data){
+  console.log(data)
+  for (var i = 0; i < areaKec.length; i++) {
+    dataKec[areaKec[i].kode__kode_pkm__kode_kec] = {
+      "area" : areaKec[i].kode__kode_pkm__kode_kec__nama_kec, 
+      "kasus" : areaKec[i].kasus
+    };
+  };
+  dataKecamatan = $.extend(data, dataKec)
+})
 
 var LayerKec = L.layerGroup();
 
