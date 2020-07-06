@@ -106,7 +106,7 @@ def index(request):
 			skip_empty_rows=True
 			)
 		sumCase = list(obj_jumlahKasus.items())[0][1]
-
+		print("identifikasi clear")
 		#Add data in database
 		if (Jumlah_Chapter.objects.filter(kode=code).exists()==False):
 
@@ -239,11 +239,11 @@ def index(request):
 					gakin = sumCase[idx][5]
 					)
 
-		#Clustering
-		countPkm = Indeks.objects.select_related('kode__kode_pkm')\
-		.filter(tanggal=date).annotate(Count('kode__kode_pkm', distinct=True))
-		if countPkm>60 :
-			funcClustering(date)
+			#Clustering
+			countPkm = Indeks.objects.filter(tanggal=date)\
+			.annotate(Count('kode_pkm', distinct=True))
+			if countPkm>60 :
+				funcClustering(date)
 
 		print("Done")
 		print(list_pkmCode)
@@ -294,7 +294,6 @@ def index(request):
 		qsClustering = Klaster_Penyakit.objects.select_related('subkat')\
 		.order_by('-llr')[:3].values('subkat__nama_subkat','klaster_kode', 'klaster_nama', 'llr')
 		qsChartKasus = qs.aggregate(Kasus_Baru=Sum('kasus_baru'), Kasus_Lama=Sum('kasus_lama'))
-		print(qsChartKasus)
 
 		if is_valid_queryparam(penyakit_query) and penyakit_query!= "Semua Penyakit":
 			splitKodePenyakit = penyakit_query.split(":")
@@ -415,8 +414,8 @@ def index(request):
 def funcClustering(tgl):
 	#urlOutput = requests.get('https://ssdsd')
 	#dataOutput = urlOutput.json()
-	dataOutput ={} 
-	if dataOutput is not None:
+	dataOutput ={}
+	if len(dataOutput) > 0:
 		tanggal = dataOutput[0].tanggal
 		if Klaster_Penyakit.objects.filter(tanggal=tanggal).exists()==False:
 			for data in dataOutput:

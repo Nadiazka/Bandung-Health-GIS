@@ -158,12 +158,10 @@
                   $(document).ready(function(){
                       $("#inputLB1").submit(function(){
                            alert('submited');
-                           $(window).on('load', function() {
-                                $.get("index/", function(data){
-                                  alert("File telah terupload di:\n" + data.urlFile)
-                                })
-                            });
                          });
+                      $(window).on('load', function() {
+                          alert("File telah terupload di:\n" + data.urlFile)
+                        });
                   });
                 </script>
               </div>
@@ -248,31 +246,18 @@
       </form> <br>
       <script type="text/javascript">
         var areaPkm = {{areaPkm|json}}
-        console.log(areaPkm)
         var areaKec = {{areaKec|json}}
-        console.log(areaKec)
         var statPkm = {{statPkm|json}}
-        console.log(statPkm)
         var statKec = {{statKec|json}}
-        console.log(statKec)
         var chartPkm = {{chartPkm|json}}
-        console.log(chartPkm)
         var chartKec = {{chartKec|json}}
-        console.log(chartKec)
         var chartPenyakit = {{chartPenyakit|json}}
-        console.log(chartPenyakit)
         var chartGender = {{chartGender|json}}
-        console.log(chartGender)
         var chartUmur = {{chartUmur|json}}
-        console.log(chartUmur)
         var chartPeriode = {{chartPeriode|json}}
-        console.log(chartPeriode)
         var chartKasus = {{chartKasus|json}}
-        console.log(chartKasus)
         var qsClustering = {{qsClustering|json}}
-        console.log(qsClustering)
         var qs = {{qs|json}}
-        console.log(qs)
       </script>
     </div>
     <!-- Peta -->

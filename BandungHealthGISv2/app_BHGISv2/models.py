@@ -14,8 +14,8 @@ class Pasien(SoftDeleteModel):
 class Kecamatan(SoftDeleteModel):
 	kode_kec = models.CharField(max_length=10, primary_key=True)
 	nama_kec = models.CharField(max_length=25)
-	lat = models.FloatField(null=True)
-	longt = models.FloatField(null=True)
+	lat = models.CharField(max_length=12)
+	longt = models.CharField(max_length=12)
 	pddk_l = models.PositiveIntegerField()
 	pddk_p = models.PositiveIntegerField()
 	jml_pddk = models.IntegerField()
@@ -154,7 +154,7 @@ class Klaster_Penyakit(SoftDeleteModel):
 	jumlah_populasi = models.IntegerField()
 	ekspektasi_kasus = models.FloatField()
 	smr = models.FloatField(max_length=2)
-	llr = models.PositiveSmallIntegerField(max_length=2)
+	llr = models.PositiveSmallIntegerField()
 	rank = models.FloatField(max_length=2)
 	p_value = models.FloatField(max_length=5)
 
