@@ -125,19 +125,19 @@ class ViewJumlahKategori(ImportExportModelAdmin):
 	resource_class = JumlahKategoriResource
 
 @admin.register(Jumlah_Kasus_Subkat)
-class ViewJumlahKategori(ImportExportModelAdmin):
+class ViewJumlahKasusSubkat(ImportExportModelAdmin):
 	resource_class = JumlahKasusSubkatResource
 
 @admin.register(Jumlah_Kasus_Kat)
-class ViewJumlahKategori(ImportExportModelAdmin):
+class ViewJumlahKasusKat(ImportExportModelAdmin):
 	resource_class = JumlahKasusKatResource
 
 @admin.register(Jumlah_Subchapter)
-class ViewJumlahKategori(ImportExportModelAdmin):
+class ViewJumlahSubchapter(ImportExportModelAdmin):
 	resource_class = JumlahSubchapterResource
 
 @admin.register(Jumlah_Chapter)
-class ViewJumlahKategori(ImportExportModelAdmin):
+class ViewJumlahChapter(ImportExportModelAdmin):
 	resource_class = JumlahChapterResource
 
 @admin.register(Klaster_Penyakit)
