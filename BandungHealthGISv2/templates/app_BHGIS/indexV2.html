@@ -48,6 +48,7 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 	<link rel="stylesheet" type="text/css" href="{% static "css/stylesV1.css" %}"/>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 	<!-- Chart -->
 	<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
@@ -157,11 +158,21 @@
                 <script type="text/javascript">
                   $(document).ready(function(){
                       $("#inputLB1").submit(function(){
-                           alert('submited');
-                         });
-                      $(window).on('load', function() {
-                          alert("File telah terupload di:\n" + data.urlFile)
-                        });
+                        if ($("#LB1File")[0].files.length === 0){
+                          swal({
+                            title: "Error",
+                            text: "Tidak ada input",
+                            icon: "error",
+                          });
+                        }
+                        else{
+                          swal({
+                            title: "Selamat!",
+                            text: "File anda telah disimpan",
+                            icon: "success",
+                          });
+                        }
+                      });
                   });
                 </script>
               </div>
