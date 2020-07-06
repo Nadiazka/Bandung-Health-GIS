@@ -362,7 +362,7 @@ def index(request):
 				qsChartDate =qs.values('kode__tanggal').annotate(kasus=Sum('jumlah')).order_by('kasus')[:10]
 				qsChartKasus = qs.aggregate(Kasus_Baru=Sum('kasus_baru'), Kasus_Lama=Sum('kasus_lama'))
 		
-			if "." in kodePenyakit:
+			if gender_query != "Semua Jenis" and "." in kodePenyakit:
 				if jenisKasus_query == "Kasus Baru":
 					qsChartPenyakit = qs.values('icd_10__nama_subkat').annotate(kasus = Sum('kasus_baru')).order_by('kasus')[:10]
 				elif jenisKasus_query=="Kasus Lama":
