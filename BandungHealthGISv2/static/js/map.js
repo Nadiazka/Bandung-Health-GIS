@@ -472,10 +472,11 @@ if (qsClustering[2] != null && qsClustering[2] != undefined ){
   
   if (qs.penyakit_query != "Semua Penyakit"){
     for (var i=0; i<qsClustering.length; i++){
-      penyakit = qsClustering[i].subkat__nama_subkat.concat(", ")
-      tanggal = (penyakit.concat(qsClustering[i].tanggal)).concat(", ")
-      fullOpt = tanggal.concat(qsClustering[i].jenis_kelamin)
-      optClust[i]=fullOpt
+      //penyakit = qsClustering[i].subkat__nama_subkat.concat(", ")
+      //tanggal = (penyakit.concat(qsClustering[i].tanggal)).concat(", ")
+      //fullOpt = tanggal.concat(qsClustering[i].jenis_kelamin)
+      //optClust[i]=fullOpt
+      optClust[i]=qsClustering[i].subkat__nama_subkat
     }
     console.log(optClust)
   }
