@@ -310,6 +310,7 @@ def index(request):
 
 			#Clustering
 			qsClustering = Klaster_Penyakit.objects\
+			.select_related('subkat')\
 			.filter(
 				tanggal__gte=dateStart_query,
 				tanggal__lt=dateEnd_query,
@@ -318,7 +319,14 @@ def index(request):
 				jenis_kasus=jenisKasus_query
 				)\
 			.order_by('-llr')[:3]\
-			.values('subkat','klaster_kode', 'klaster_nama', 'llr')
+			.values(
+				'subkat',
+				'subkat__nama_subkat',
+				'jenis_kelamin',
+				'tanggal',
+				'klaster_kode',
+				'klaster_nama',
+				'llr')
 
 		elif penyakit_query == "Semua Penyakit":
 			qs = Jumlah_Kategori.objects.select_related('kode__kode_pkm')
@@ -414,7 +422,7 @@ def index(request):
 	return render (request, 'app_BHGIS/indexV2.html')
 
 def funcClustering(tgl):
-	#urlOutput = requests.get('https://ssdsd')
+	#urlOutput = requests.get('https://djatianwar.shinyapps.io/disease-clustering/')
 	#dataOutput = urlOutput.json()
 	dataOutput ={}
 	if len(dataOutput) > 0:
@@ -425,7 +433,6 @@ def funcClustering(tgl):
 					tanggal=data.tanggal,
 					subkat=ICD10_Subkategori.objects.get(subkat=data.subkat),
 					jenis_kelamin=data.jenis_kelamin,
-					jenis_kasus=data.jenis_kasus,
 					jumlah_kasus=data.kasus,
 					klaster_kode=data.klaster_kode,
 					klaster_nama=data.klaster_nama,
