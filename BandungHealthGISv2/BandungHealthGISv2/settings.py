@@ -25,8 +25,8 @@ STATIC_DIR = os.path.join(BASE_DIR,"static")
 SECRET_KEY = '8@uchk8j6ns34h&h6=q_e!^o39bj9sz5m^i8q8a6j&@7$bml!-'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-#DEBUG = False
+#DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['bandunghealthgis.herokuapp.com', '127.0.0.1']
 
