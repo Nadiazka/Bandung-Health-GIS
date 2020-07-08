@@ -315,8 +315,7 @@ def index(request):
 				tanggal__gte=dateStart_query,
 				tanggal__lt=dateEnd_query,
 				subkat=kodePenyakit,
-				jenis_kelamin=gender_query,
-				jenis_kasus=jenisKasus_query
+				jenis_kelamin=gender_query
 				)\
 			.order_by('-llr')[:3]\
 			.values(
