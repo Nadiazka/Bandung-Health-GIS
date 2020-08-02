@@ -328,7 +328,7 @@ def index(request):
 				'llr')
 
 		elif penyakit_query == "Semua Penyakit":
-			qs = Jumlah_Kategori.objects.select_related('kode__kode_pkm')
+			qs = Jumlah_Chapter.objects.select_related('kode__kode_pkm')
 			
 		if is_valid_queryparam(gender_query) and gender_query != "Semua Jenis":
 			qs = qs.filter(kat_pasien__jenis_kelamin__iexact=gender_query)
@@ -352,21 +352,21 @@ def index(request):
 				qsKec = qs.values('kode__kode_pkm__kode_kec', 'kode__kode_pkm__kode_kec__nama_kec').annotate(kasus = Sum('kasus_baru'))
 				qsChartUmur = qs.values('kat_pasien__umur').annotate(kasus = Sum('kasus_baru')).order_by('-kasus')[:10]
 				qsChartGender =qs.values('kat_pasien__jenis_kelamin').annotate(kasus = Sum('kasus_baru'))
-				qsChartDate =qs.values('kode__tanggal').annotate(kasus = Sum('kasus_baru')).order_by('kasus')[:10]
+				qsChartDate =qs.values('kode__tanggal').annotate(kasus = Sum('kasus_baru')).order_by('-kode__tanggal')[:10]
 				qsChartKasus = qs.aggregate(Kasus_Baru=Sum('kasus_baru'))
 			elif jenisKasus_query=="Kasus Lama":
 				qsPkm = qs.values('kode__kode_pkm', 'kode__kode_pkm__nama_pkm').annotate(kasus = Sum('kasus_lama'))
 				qsKec = qs.values('kode__kode_pkm__kode_kec', 'kode__kode_pkm__kode_kec__nama_kec').annotate(kasus = Sum('kasus_lama'))
 				qsChartUmur = qs.values('kat_pasien__umur').annotate(kasus = Sum('kasus_lama')).order_by('-kasus')[:10]
 				qsChartGender =qs.values('kat_pasien__jenis_kelamin').annotate(kasus = Sum('kasus_lama'))
-				qsChartDate =qs.values('kode__tanggal').annotate(kasus = Sum('kasus_lama')).order_by('kasus')[:10]
+				qsChartDate =qs.values('kode__tanggal').annotate(kasus = Sum('kasus_lama')).order_by('-kode__tanggal')[:10]
 				qsChartKasus = qs.aggregate(Kasus_Lama=Sum('kasus_lama'))
 			elif jenisKasus_query=="Semua Jenis":
 				qsPkm = qs.values('kode__kode_pkm', 'kode__kode_pkm__nama_pkm').annotate(kasus=Sum('jumlah'))
 				qsKec = qs.values('kode__kode_pkm__kode_kec', 'kode__kode_pkm__kode_kec__nama_kec').annotate(kasus=Sum('jumlah'))
 				qsChartUmur = qs.values('kat_pasien__umur').annotate(kasus=Sum('jumlah')).order_by('-kasus')[:10]
 				qsChartGender =qs.values('kat_pasien__jenis_kelamin').annotate(kasus=Sum('jumlah'))
-				qsChartDate =qs.values('kode__tanggal').annotate(kasus=Sum('jumlah')).order_by('kasus')[:10]
+				qsChartDate =qs.values('kode__tanggal').annotate(kasus=Sum('jumlah')).order_by('-kode__tanggal')[:10]
 				qsChartKasus = qs.aggregate(Kasus_Baru=Sum('kasus_baru'), Kasus_Lama=Sum('kasus_lama'))
 		
 			if penyakit_query!= "Semua Penyakit" and "." in kodePenyakit:
