@@ -249,6 +249,9 @@ if (qsClustering[0] != null && qsClustering[0] != undefined ){
     //out.push("Kecamatan : "+qsClustering[0].klaster_nama);
     //out.push("Derajat Signifikansi : "+ qsClustering[0].llr);
     out.push("Kecamatan : "+nama[0]);
+    out.push("Penyakit : "+x[0].subkat__nama_subkat);
+    out.push("Jenis Kelamin : "+x[0].jenis_kelamin);
+    out.push("Tanggal : "+x[0].tanggal);
     out.push("Derajat Signifikansi : "+ x[0].llr);
     layer.bindPopup(out.join("<br />"));
     layer.on('mouseover', function (e) {
