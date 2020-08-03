@@ -275,78 +275,54 @@ def index(request):
 		print(dateEnd_query)
 		print(jenisKasus_query)
 
-		#Tampilan Default
-		#Get last date in database
-		startPeriode = Indeks.objects.values('tanggal').order_by('-tanggal')[0]['tanggal']
-		print(startPeriode)
-		#get last date in the last month
-		endPeriode = last_day_of_month(startPeriode)
+		if is_valid_queryparam(penyakit_query) and is_valid_queryparam(gender_query) and is_valid_queryparam(umur_query) and is_valid_queryparam(dateStart_query) and is_valid_queryparam(dateEnd_query) and is_valid_queryparam(jenisKasus_query):
+			if penyakit_query!= "Semua Penyakit":
+				splitKodePenyakit = penyakit_query.split(":")
+				kodePenyakit = splitKodePenyakit[0]
 
-		qs = Jumlah_Kategori.objects.select_related('kode__kode_pkm').filter(kode__tanggal=startPeriode)
-		qsPkm = qs.values('kode__kode_pkm', 'kode__kode_pkm__nama_pkm')\
-				.annotate(kasus = Sum('kasus_baru'))
-		qsKec = qs.values('kode__kode_pkm__kode_kec', 'kode__kode_pkm__kode_kec__nama_kec')\
-				.annotate(kasus = Sum('kasus_baru'))
-		qsChartPenyakit = qs.values('kat__nama_kat')\
-				.annotate(kasus = Sum('kasus_baru'))\
-				.order_by('kasus')[:10]
-		qsChartUmur = qs.values('kat_pasien__umur').annotate(kasus = Sum('kasus_baru')).order_by('-kasus')[:10]
-		qsChartGender =qs.values('kat_pasien__jenis_kelamin').annotate(kasus = Sum('kasus_baru'))
-		qsChartDate =qs.values('kode__tanggal').annotate(kasus = Sum('kasus_baru')).order_by('-kasus')[:10]
-		qsClustering = Klaster_Penyakit.objects.select_related('subkat')\
-		.order_by('-llr')[:3].values('subkat__nama_subkat','klaster_kode', 'klaster_nama', 'llr')
-		qsChartKasus = qs.aggregate(Kasus_Baru=Sum('kasus_baru'), Kasus_Lama=Sum('kasus_lama'))
+				if "." in kodePenyakit:
+					qs = Kasus.objects.select_related('kode__kode_pkm')\
+					.filter(icd_10=kodePenyakit)
+				else:
+					qs = Jumlah_Kategori.objects.select_related('kode__kode_pkm')\
+					.filter(kat=kodePenyakit)
 
-		if is_valid_queryparam(penyakit_query) and penyakit_query!= "Semua Penyakit":
-			splitKodePenyakit = penyakit_query.split(":")
-			kodePenyakit = splitKodePenyakit[0]
+				#Clustering
+				qsClustering = Klaster_Penyakit.objects\
+				.select_related('subkat')\
+				.filter(
+					tanggal__gte=dateStart_query,
+					tanggal__lt=dateEnd_query,
+					subkat=kodePenyakit,
+					jenis_kelamin=gender_query
+					)\
+				.order_by('-llr')[:3]\
+				.values(
+					'subkat',
+					'subkat__nama_subkat',
+					'jenis_kelamin',
+					'tanggal',
+					'klaster_kode',
+					'klaster_nama',
+					'llr')
 
-			if "." in kodePenyakit:
-				qs = Kasus.objects.select_related('kode__kode_pkm')\
-				.filter(icd_10=kodePenyakit)
-			else:
-				qs = Jumlah_Kategori.objects.select_related('kode__kode_pkm')\
-				.filter(kat=kodePenyakit)
+			elif penyakit_query == "Semua Penyakit":
+				qs = Jumlah_Chapter.objects.select_related('kode__kode_pkm')
+				
+			if gender_query != "Semua Jenis":
+				qs = qs.filter(kat_pasien__jenis_kelamin__iexact=gender_query)
 
-			#Clustering
-			qsClustering = Klaster_Penyakit.objects\
-			.select_related('subkat')\
-			.filter(
-				tanggal__gte=dateStart_query,
-				tanggal__lt=dateEnd_query,
-				subkat=kodePenyakit,
-				jenis_kelamin=gender_query
-				)\
-			.order_by('-llr')[:3]\
-			.values(
-				'subkat',
-				'subkat__nama_subkat',
-				'jenis_kelamin',
-				'tanggal',
-				'klaster_kode',
-				'klaster_nama',
-				'llr')
+			if umur_query != "Semua Umur":
+				qs = qs.filter(kat_pasien__umur__iexact=umur_query)
 
-		elif penyakit_query == "Semua Penyakit":
-			qs = Jumlah_Chapter.objects.select_related('kode__kode_pkm')
-			
-		if is_valid_queryparam(gender_query) and gender_query != "Semua Jenis":
-			qs = qs.filter(kat_pasien__jenis_kelamin__iexact=gender_query)
-
-		if is_valid_queryparam(umur_query) and umur_query != "Semua Umur":
-			qs = qs.filter(kat_pasien__umur__iexact=umur_query)
-
-		if is_valid_queryparam(dateStart_query):
-			qs = qs.filter(kode__tanggal__gte=dateStart_query)
+			#Filter Periode
+			qs = qs.filter(kode__tanggal__gte=dateStart_query, kode__tanggal__lt=dateEnd_query)
 			tempStartDate = datetime.strptime(dateStart_query, '%Y-%m-%d').date()
 			startPeriode = tempStartDate
-
-		if is_valid_queryparam(dateEnd_query):
-			qs = qs.filter(kode__tanggal__lt=dateEnd_query)
 			tempEndDate = datetime.strptime(dateEnd_query, '%Y-%m-%d').date()
 			endPeriode = last_day_of_month(tempEndDate)
 
-		if is_valid_queryparam(jenisKasus_query):
+			#Filter Jenis Kasus
 			if jenisKasus_query=="Kasus Baru":
 				qsPkm = qs.values('kode__kode_pkm', 'kode__kode_pkm__nama_pkm').annotate(kasus = Sum('kasus_baru'))
 				qsKec = qs.values('kode__kode_pkm__kode_kec', 'kode__kode_pkm__kode_kec__nama_kec').annotate(kasus = Sum('kasus_baru'))
@@ -390,6 +366,29 @@ def index(request):
 					qsChartPenyakit = qs.values('kat__nama_kat').annotate(kasus = Sum('kasus_lama')).order_by('kasus')[:10]
 				elif jenisKasus_query=="Semua Jenis":
 					qsChartPenyakit = qs.values('kat__nama_kat').annotate(kasus=Sum('jumlah')).order_by('kasus')[:10]
+		else :
+			#Tampilan Default
+			#Get last date in database
+			startPeriode = Indeks.objects.values('tanggal').order_by('-tanggal')[0]['tanggal']
+			print(startPeriode)
+			#get last date in the last month
+			endPeriode = last_day_of_month(startPeriode)
+
+			qs = Jumlah_Chapter.objects.select_related('kode__kode_pkm').filter(kode__tanggal=startPeriode)
+			qsPkm = qs.values('kode__kode_pkm', 'kode__kode_pkm__nama_pkm')\
+					.annotate(kasus = Sum('kasus_baru'))
+			qsKec = qs.values('kode__kode_pkm__kode_kec', 'kode__kode_pkm__kode_kec__nama_kec')\
+					.annotate(kasus = Sum('kasus_baru'))
+			qsChartPenyakit = qs.values('chapter__nama_chapter')\
+					.annotate(kasus = Sum('kasus_baru'))\
+					.order_by('kasus')[:10]
+			qsChartUmur = qs.values('kat_pasien__umur').annotate(kasus = Sum('kasus_baru')).order_by('-kasus')[:10]
+			qsChartGender =qs.values('kat_pasien__jenis_kelamin').annotate(kasus = Sum('kasus_baru'))
+			qsChartDate =qs.values('kode__tanggal').annotate(kasus = Sum('kasus_baru')).order_by('-kasus')[:10]
+			qsClustering = Klaster_Penyakit.objects.select_related('subkat')\
+			.order_by('-llr')[:3].values('subkat__nama_subkat','klaster_kode', 'klaster_nama', 'llr')
+			qsChartKasus = qs.aggregate(Kasus_Baru=Sum('kasus_baru'), Kasus_Lama=Sum('kasus_lama'))
+		
 
 		qsChartPkm = qsPkm.order_by('-kasus')[:10]
 		qsChartKec = qsKec.order_by('-kasus')[:10]
@@ -479,3 +478,8 @@ class PenyakitSubkat(generics.ListCreateAPIView):
 class PenyakitKat(generics.ListCreateAPIView):
 	queryset = ICD10_Kategori.objects.values('kat','nama_kat')
 	serializer_class = ICD10_KategoriSerializer2
+
+class ClusteringAPI(generics.ListCreateAPIView):
+	queryset = Klaster_Penyakit.objects.order_by('-tanggal')[:1]\
+	.values('tanggal', 'jenis_kelamin', 'klaster_kode', 'klaster_nama')
+	serializer_class = ClusteringSerializer

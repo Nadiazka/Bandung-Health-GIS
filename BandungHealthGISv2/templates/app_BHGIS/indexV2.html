@@ -269,6 +269,9 @@
         var chartKasus = {{chartKasus|json}}
         var qsClustering = {{qsClustering|json}}
         var qs = {{qs|json}}
+        console.log(areaPkm)
+        console.log(areaKec)
+        console.log(chartPenyakit)
         console.log(qsClustering)
       </script>
     </div>
@@ -282,14 +285,14 @@
 <!-- Diagram -->
 <div class="container-fluid bg-dark" id="diagramBlok">
       <div class="row">
+        <div class="col-md-12" style="height=5px;">
+          <canvas id="ChartPenyakit"></canvas>
+        </div>
         <div class="col-md-6" style="height=5px;">
           <canvas id="ChartPkm"></canvas>
         </div>
         <div class="col-md-6" style="height=5px;">
           <canvas id="ChartKec"></canvas>
-        </div>
-        <div class="col-md-6" style="height=5px;">
-          <canvas id="ChartPenyakit"></canvas>
         </div><br>
         <div class="col-md-6" style="height=5px;">
           <canvas id="ChartGender"></canvas>
