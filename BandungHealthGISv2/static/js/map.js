@@ -227,6 +227,9 @@ if (qsClustering[0] != null && qsClustering[0] != undefined ){
   function highlightFeatureClstr1(e) {
     console.log("Masuk highlightFeatureClstr1")
     var layer = e.target;
+    if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+              layer.bringToFront();
+            }
     
     }
 
@@ -248,10 +251,11 @@ if (qsClustering[0] != null && qsClustering[0] != undefined ){
           style : function(feature){
             if (feature.properties.kode_kode=== dataClust1[i]) return {color: "#1e0505"};
           },
-          onEachFeature: function(layer){
+          onEachFeature: function(e){
+            var layer = e.target;
             if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
-              layer.bringToFront();
-            }
+                      layer.bringToFront();
+                    }
             var out = [];
             out.push("Kecamatan : "+namaClust1[i]);
             out.push("Penyakit : "+qsClustering[0].subkat__nama_subkat);
