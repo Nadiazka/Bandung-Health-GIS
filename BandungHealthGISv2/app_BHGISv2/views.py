@@ -478,8 +478,7 @@ class PenyakitKat(generics.ListCreateAPIView):
 
 class ClusteringAPI(generics.ListCreateAPIView):
 	tgl = Indeks.objects.values('tanggal').order_by('-tanggal')[0]['tanggal']
-	queryset = Klaster_Penyakit.objects.filter(tanggal=tgl)\
-	.values('tanggal', 'jenis_kelamin','subkat', 'klaster_kode', 'klaster_nama')
+	queryset = Klaster_Penyakit.objects.filter(tanggal=tgl)
 	serializer_class = ClusteringSerializer
 	filter_backends = [DjangoFilterBackend]
 	filterset_fields = ['subkat']
