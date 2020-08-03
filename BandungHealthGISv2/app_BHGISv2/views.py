@@ -482,4 +482,4 @@ class ClusteringAPI(generics.ListCreateAPIView):
 	.values('tanggal', 'jenis_kelamin','subkat', 'klaster_kode', 'klaster_nama')
 	serializer_class = ClusteringSerializer
 	filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['subkat']
+	filterset_fields = ['subkat']
