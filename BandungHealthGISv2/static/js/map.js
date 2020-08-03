@@ -220,13 +220,13 @@ var Clustering3 = L.layerGroup();
 
 if (qsClustering[0] != null && qsClustering[0] != undefined ){
   var x = [{
-    jenis_kelamin: "semua jenis"
-    klaster_kode: "3273160, 3273070, 3273150, 3273170"
-    klaster_nama: "BATUNUNGGAL, LENGKONG, KIARACONDONG, SUMUR BANDUNG"
-    llr: 21
-    subkat: "A01.0"
-    subkat__nama_subkat: "Demam Tifoid"
-    tanggal: "2019-11-01"
+    jenis_kelamin: "semua jenis",
+    klaster_kode: "3273160, 3273070, 3273150, 3273170",
+    klaster_nama: "BATUNUNGGAL, LENGKONG, KIARACONDONG, SUMUR BANDUNG",
+    llr: 21,
+    subkat: "A01.0",
+    subkat__nama_subkat: "Demam Tifoid",
+    tanggal: "2019-11-01",
   }
   ]
   var strX = x[0].klaster_kode
