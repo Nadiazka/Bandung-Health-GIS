@@ -197,7 +197,7 @@ var myChart2 = new Chart(ctx, {
 var ctx = document.getElementById("ChartPeriode").getContext('2d');
 chartPeriodeLabel = [];
 chartPeriodeData = [];
-for (var i = 0; i < chartPeriode.length; i++) {
+for (var i = chartPeriode.length; i <0 ; i--) {
     chartPeriodeLabel[i] = chartPeriode[i].kode__tanggal;
     chartPeriodeData[i]=chartPeriode[i].kasus
   };
