@@ -277,7 +277,7 @@ if (qsClustering[1] != null && qsClustering[1] != undefined ){
   var strNamaClust2 = qsClustering[1].klaster_nama
   var namaClust2 = strNamaClust2.split(", ")
 
-  function highlightFeatureClstr1(e) {
+  function highlightFeatureClstr2(e) {
     console.log("Masuk highlightFeatureClstr1")
     var layer = e.target;
     if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
@@ -329,7 +329,7 @@ if (qsClustering[2] != null && qsClustering[2] != undefined ){
   var strNamaClust3 = qsClustering[2].klaster_nama
   var namaClust3 = strNamaClust3.split(", ")
 
-  function highlightFeatureClstr1(e) {
+  function highlightFeatureClstr3(e) {
     console.log("Masuk highlightFeatureClstr1")
     var layer = e.target;
     if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
