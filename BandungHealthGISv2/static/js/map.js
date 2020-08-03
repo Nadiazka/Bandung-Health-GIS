@@ -475,6 +475,7 @@ if (qsClustering[2] != null && qsClustering[2] != undefined ){
   optDateStart = qs.startPeriode;
   optDateEnd = qs.endPeriode; 
   optKasus = "Semua Jenis";
+  optClust = ['-', '-', '-'];
 
   if (qs.penyakit_query != null && qs.penyakit_query != undefined){
     optPenyakit = qs.penyakit_query
