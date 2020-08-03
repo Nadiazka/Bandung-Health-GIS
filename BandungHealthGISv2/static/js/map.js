@@ -475,59 +475,46 @@ if (qsClustering[2] != null && qsClustering[2] != undefined ){
   optDateStart = qs.startPeriode;
   optDateEnd = qs.endPeriode; 
   optKasus = "Semua Jenis";
-  optClust = ['-', '-', '-'];
 
   if (qs.penyakit_query != null && qs.penyakit_query != undefined){
     optPenyakit = qs.penyakit_query
   }
-  console.log(optPenyakit)
   
-  if (qs.penyakit_query != null && qs.penyakit_query != undefined){
-    for (var i=0; i<qsClustering.length; i++){
-      optClust[i]=qsClustering[i].subkat__nama_subkat
+  for (var i=0; i<qsClustering.length; i++){
+    optClust[i]=qsClustering[i].subkat__nama_subkat
     }
-    console.log(optClust)
-  }
-
+  
   if (qs.gender_query != null && qs.gender_query != undefined){
     optGender = qs.gender_query
   }
-  console.log(optGender)
 
   if (qs.umur_query != null && qs.umur_query != undefined){
     optUmur = qs.umur_query
   }
-  console.log(optUmur)
 
   if (qs.startPeriode != null && qs.startPeriode != undefined){
     optDateStart = qs.startPeriode
   }
-  console.log(optDateStart)
 
   if (qs.endPeriode != null && qs.endPeriode != undefined){
     optDateEnd = qs.endPeriode
   }
-  console.log(optDateEnd)
 
   if (qs.dateEnd_query != null && qs.dateEnd_query != undefined){
     optDateEnd = qs.dateEnd_query
   }
-  console.log(optDateEnd)
 
   if (qs.jenisKasus_query != null && qs.jenisKasus_query != undefined){
     optKasus = qs.jenisKasus_query
   }
-  console.log(optKasus)
 
   if (qs.dateEnd_query != null && qs.dateEnd_query != undefined){
     optDateEnd = qs.dateEnd_query
   }
-  console.log(optDateEnd)
 
   if (qs.dateEnd_query != null && qs.dateEnd_query != undefined){
     optDateEnd = qs.dateEnd_query
   }
-  console.log(optDateEnd)
 
   info.onAdd = function (map) {
     this._div = L.DomUtil.create('div', 'info');

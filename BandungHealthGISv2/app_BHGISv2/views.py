@@ -398,7 +398,15 @@ def index(request):
 			qsChartGender =qs.values('kat_pasien__jenis_kelamin').annotate(kasus = Sum('jumlah'))
 			qsChartDate =qs.values('kode__tanggal').annotate(kasus = Sum('jumlah')).order_by('-kasus')[:10]
 			qsClustering = Klaster_Penyakit.objects.select_related('subkat')\
-			.order_by('-llr')[:3].values('subkat__nama_subkat','klaster_kode', 'klaster_nama', 'llr')
+			.order_by('-llr')[:3]\
+			.values(
+					'subkat',
+					'subkat__nama_subkat',
+					'jenis_kelamin',
+					'tanggal',
+					'klaster_kode',
+					'klaster_nama',
+					'llr')
 			qsChartKasus = qs.aggregate(Kasus_Baru=Sum('kasus_baru'), Kasus_Lama=Sum('kasus_lama'))
 		
 
