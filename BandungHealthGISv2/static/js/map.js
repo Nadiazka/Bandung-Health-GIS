@@ -279,12 +279,10 @@ if (qsClustering[0] != null && qsClustering[0] != undefined ){
           style : function(feature){
             //if (feature.properties.kode_kode=== dataClustering1[i]) return {color: "#1e0505"};
             if (feature.properties.kode_kode=== dataX[i]) return {color: "#1e0505"};
-          }
+          },
+          onEachFeature: onEachFeatureClstr1
         }).addTo(Clustering1);
       }
-      L.geojson(data,{
-        onEachFeature: onEachFeatureClstr1
-      }).addTo(Clustering1);
       console.log("clustering aman")
     });
 }
