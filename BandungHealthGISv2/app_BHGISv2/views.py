@@ -373,15 +373,15 @@ def index(request):
 
 			qs = Jumlah_Chapter.objects.select_related('kode__kode_pkm').filter(kode__tanggal=startPeriode)
 			qsPkm = qs.values('kode__kode_pkm', 'kode__kode_pkm__nama_pkm')\
-					.annotate(kasus = Sum('kasus_baru'))
+					.annotate(kasus = Sum('jumlah'))
 			qsKec = qs.values('kode__kode_pkm__kode_kec', 'kode__kode_pkm__kode_kec__nama_kec')\
-					.annotate(kasus = Sum('kasus_baru'))
+					.annotate(kasus = Sum('jumlah'))
 			qsChartPenyakit = qs.values('chapter__nama_chapter')\
-					.annotate(kasus = Sum('kasus_baru'))\
-					.order_by('kasus')[:10]
-			qsChartUmur = qs.values('kat_pasien__umur').annotate(kasus = Sum('kasus_baru')).order_by('-kasus')[:10]
-			qsChartGender =qs.values('kat_pasien__jenis_kelamin').annotate(kasus = Sum('kasus_baru'))
-			qsChartDate =qs.values('kode__tanggal').annotate(kasus = Sum('kasus_baru')).order_by('-kasus')[:10]
+					.annotate(kasus = Sum('jumlah'))\
+					.order_by('-kasus')[:10]
+			qsChartUmur = qs.values('kat_pasien__umur').annotate(kasus = Sum('jumlah')).order_by('-kasus')[:10]
+			qsChartGender =qs.values('kat_pasien__jenis_kelamin').annotate(kasus = Sum('jumlah'))
+			qsChartDate =qs.values('kode__tanggal').annotate(kasus = Sum('jumlah')).order_by('-kasus')[:10]
 			qsClustering = Klaster_Penyakit.objects.select_related('subkat')\
 			.order_by('-llr')[:3].values('subkat__nama_subkat','klaster_kode', 'klaster_nama', 'llr')
 			qsChartKasus = qs.aggregate(Kasus_Baru=Sum('kasus_baru'), Kasus_Lama=Sum('kasus_lama'))
