@@ -484,5 +484,5 @@ class ClusteringAPI(generics.ListCreateAPIView):
 	queryset = Klaster_Penyakit.objects.filter(tanggal=tgl)\
 	.values('tanggal', 'jenis_kelamin','subkat', 'klaster_kode', 'klaster_nama')
 	serializer_class = ClusteringSerializer
-	filter_backends = [filters.SearchFilter]
+	filter_backends = [SearchFilter]
 	search_fields = ['subkat']
