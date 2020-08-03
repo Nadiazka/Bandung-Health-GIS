@@ -251,11 +251,7 @@ if (qsClustering[0] != null && qsClustering[0] != undefined ){
           style : function(feature){
             if (feature.properties.kode_kode=== dataClust1[i]) return {color: "#1e0505"};
           },
-          onEachFeature: function(e){
-            var layer = e.target;
-            if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
-                      layer.bringToFront();
-                    }
+          onEachFeature: function(layer){
             var out = [];
             out.push("Kecamatan : "+namaClust1[i]);
             out.push("Penyakit : "+qsClustering[0].subkat__nama_subkat);
@@ -487,12 +483,8 @@ if (qsClustering[2] != null && qsClustering[2] != undefined ){
   }
   console.log(optPenyakit)
   
-  if (qs.penyakit_query != "Semua Penyakit"){
+  if (qs.penyakit_query != null && qs.penyakit_query != undefined){
     for (var i=0; i<qsClustering.length; i++){
-      //penyakit = qsClustering[i].subkat__nama_subkat.concat(", ")
-      //tanggal = (penyakit.concat(qsClustering[i].tanggal)).concat(", ")
-      //fullOpt = tanggal.concat(qsClustering[i].jenis_kelamin)
-      //optClust[i]=fullOpt
       optClust[i]=qsClustering[i].subkat__nama_subkat
     }
     console.log(optClust)
