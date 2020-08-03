@@ -464,19 +464,19 @@ def funcClustering(tgl):
 	}
 	return JsonResponse(data)
 
-class DataClustering(generics.ListCreateAPIView):
+class DataClustering(generics.ListAPIView):
 	queryset = Kecamatan.objects.all()
 	serializer_class = KecamatanSerializer2
 		
-class PenyakitSubkat(generics.ListCreateAPIView):
+class PenyakitSubkat(generics.ListAPIView):
 	queryset = ICD10_Subkategori.objects.values('subkat','nama_subkat')
 	serializer_class = ICD10_SubkategoriSerializer2
 
-class PenyakitKat(generics.ListCreateAPIView):
+class PenyakitKat(generics.ListAPIView):
 	queryset = ICD10_Kategori.objects.values('kat','nama_kat')
 	serializer_class = ICD10_KategoriSerializer2
 
-class ClusteringAPI(generics.ListCreateAPIView):
+class ClusteringAPI(generics.ListAPIView):
 	tgl = Indeks.objects.values('tanggal').order_by('-tanggal')[0]['tanggal']
 	queryset = Klaster_Penyakit.objects.filter(tanggal=tgl)
 	serializer_class = ClusteringSerializer
