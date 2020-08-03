@@ -234,7 +234,7 @@ if (qsClustering[0] != null && qsClustering[0] != undefined ){
   console.log(dataX)
 
   var strNama = x[0].klaster_nama
-  var nama = strNama.split(, )
+  var nama = strNama.split(", ")
   console.log(nama)
   var dataClustering1 = [qsClustering[0].klaster_kode]
   console.log(dataClustering1)
