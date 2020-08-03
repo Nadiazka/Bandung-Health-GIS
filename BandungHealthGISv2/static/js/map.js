@@ -272,19 +272,31 @@ if (qsClustering[0] != null && qsClustering[0] != undefined ){
 }
 
 if (qsClustering[1] != null && qsClustering[1] != undefined ){
-  var dataClustering2 = [qsClustering[1].klaster_kode]
-  console.log(dataClustering2)
-  function highlightFeatureClstr2(e) {
+  var strClust2 = qsClustering[1].klaster_kode
+  var dataClust2 = strClust2.split(", ")
+  var strNamaClust2 = qsClustering[1].klaster_nama
+  var namaClust2 = strNamaClust2.split(", ")
+
+  function highlightFeatureClstr1(e) {
+    console.log("Masuk highlightFeatureClstr1")
+    var layer = e.target;
+    if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+              layer.bringToFront();
+            }
     var out = [];
-    out.push("Kecamatan : "+qsClustering[1].klaster_nama);
+    out.push("Kecamatan : "+namaClust2[i]);
+    out.push("Penyakit : "+qsClustering[1].subkat__nama_subkat);
+    out.push("Jenis Kelamin : "+qsClustering[1].jenis_kelamin);
+    out.push("Tanggal : "+qsClustering[1].tanggal);
     out.push("Derajat Signifikansi : "+ qsClustering[1].llr);
     layer.bindPopup(out.join("<br />"));
     layer.on('mouseover', function (e) {
           this.openPopup();
           });
-      layer.on('mouseout', function (e) {
-          this.closePopup();
-      });
+    layer.on('mouseout', function (e) {
+        this.closePopup();
+    });
+    
     }
 
   function onEachFeatureClstr2(feature, layer) {
@@ -296,13 +308,13 @@ if (qsClustering[1] != null && qsClustering[1] != undefined ){
   
   $.getJSON(URLkec,function(data){
       console.log(data);
-      for (var i = 0; i < dataClustering2.length; i++) {
+      for (var i = 0; i < dataClust2.length; i++) {
         L.geoJson(data, {
           filter : function (feature){
-            if (feature.properties.kode_kode=== dataClustering2[i]) return true
+            if (feature.properties.kode_kode=== dataClust2[i]) return true
           },
           style : function(feature){
-            if (feature.properties.kode_kode=== dataClustering2[i]) return {color: "#472103"};
+            if (feature.properties.kode_kode=== dataClust2[i]) return {color: "#472103"};
           },
           onEachFeature: onEachFeatureClstr2
         }).addTo(Clustering2);
@@ -312,20 +324,31 @@ if (qsClustering[1] != null && qsClustering[1] != undefined ){
 }
   
 if (qsClustering[2] != null && qsClustering[2] != undefined ){
-  var dataClustering3 = [qsClustering[2].klaster_kode]
-  console.log(dataClustering3)
-  
-  function highlightFeatureClstr3(e) {
+  var strClust3 = qsClustering[2].klaster_kode
+  var dataClust3 = strClust3.split(", ")
+  var strNamaClust3 = qsClustering[2].klaster_nama
+  var namaClust3 = strNamaClust3.split(", ")
+
+  function highlightFeatureClstr1(e) {
+    console.log("Masuk highlightFeatureClstr1")
+    var layer = e.target;
+    if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+              layer.bringToFront();
+            }
     var out = [];
-    out.push("Kecamatan : "+qsClustering[2].klaster_nama);
+    out.push("Kecamatan : "+namaClust3[i]);
+    out.push("Penyakit : "+qsClustering[2].subkat__nama_subkat);
+    out.push("Jenis Kelamin : "+qsClustering[2].jenis_kelamin);
+    out.push("Tanggal : "+qsClustering[2].tanggal);
     out.push("Derajat Signifikansi : "+ qsClustering[2].llr);
     layer.bindPopup(out.join("<br />"));
     layer.on('mouseover', function (e) {
           this.openPopup();
           });
-      layer.on('mouseout', function (e) {
-          this.closePopup();
-      });
+    layer.on('mouseout', function (e) {
+        this.closePopup();
+    });
+    
     }
 
   function onEachFeatureClstr3(feature, layer) {
@@ -337,13 +360,13 @@ if (qsClustering[2] != null && qsClustering[2] != undefined ){
   
   $.getJSON(URLkec,function(data){
       console.log(data);
-      for (var i = 0; i < dataClustering3.length; i++) {
+      for (var i = 0; i < dataClust3.length; i++) {
         L.geoJson(data, {
           filter : function (feature){
-            if (feature.properties.kode_kode=== dataClustering3[i]) return true
+            if (feature.properties.kode_kode=== dataClust3[i]) return true
           },
           style : function(feature){
-            if (feature.properties.kode_kode=== dataClustering3[i]) return {color: "#403803"};
+            if (feature.properties.kode_kode=== dataClust3[i]) return {color: "#403803"};
           },
           onEachFeature: onEachFeatureClstr3
         }).addTo(Clustering3);
@@ -475,6 +498,7 @@ if (qsClustering[2] != null && qsClustering[2] != undefined ){
   optDateStart = qs.startPeriode;
   optDateEnd = qs.endPeriode; 
   optKasus = "Semua Jenis";
+  optClust = [];
 
   if (qs.penyakit_query != null && qs.penyakit_query != undefined){
     optPenyakit = qs.penyakit_query
