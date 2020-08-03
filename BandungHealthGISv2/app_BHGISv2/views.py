@@ -481,4 +481,4 @@ class ClusteringAPI(generics.ListCreateAPIView):
 	queryset = Klaster_Penyakit.objects.filter(tanggal=tgl)
 	serializer_class = ClusteringSerializer
 	filter_backends = [DjangoFilterBackend]
-	filterset_fields = ['subkat']
+	filterset_fields = ['subkat', 'jenis_kelamin']
