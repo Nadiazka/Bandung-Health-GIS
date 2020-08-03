@@ -247,11 +247,11 @@ if (qsClustering[0] != null && qsClustering[0] != undefined ){
     }
 
   function onEachFeatureClstr1(feature, layer) {
-    console.log("masuk onEachFeature")
     layer.on({
         mouseover: highlightFeatureClstr1,
         click: zoomToFeature
     });
+    layer.bindPopup("Kecamatan : "+namaClust1[i])
   }
 
   $.getJSON(URLkec,function(data){
