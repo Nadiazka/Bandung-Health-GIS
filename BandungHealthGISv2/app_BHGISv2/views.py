@@ -480,6 +480,9 @@ class PenyakitKat(generics.ListCreateAPIView):
 	serializer_class = ICD10_KategoriSerializer2
 
 class ClusteringAPI(generics.ListCreateAPIView):
-	queryset = Klaster_Penyakit.objects.order_by('-tanggal')[:1]\
-	.values('tanggal', 'jenis_kelamin', 'klaster_kode', 'klaster_nama')
+	tgl = Indeks.objects.values('tanggal').order_by('-tanggal')[0]['tanggal']
+	queryset = Klaster_Penyakit.objects.filter(tanggal=tgl)\
+	.values('tanggal', 'jenis_kelamin','subkat', 'klaster_kode', 'klaster_nama')
 	serializer_class = ClusteringSerializer
+	filter_backends = [filters.SearchFilter]
+	search_fields = ['subkat']

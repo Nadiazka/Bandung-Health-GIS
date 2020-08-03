@@ -20,4 +20,4 @@ class KecamatanSerializer2(serializers.ModelSerializer):
 class ClusteringSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Klaster_Penyakit
-		fields = ['tanggal', 'jenis_kelamin', 'klaster_kode', 'klaster_nama']
+		fields = ['tanggal', 'jenis_kelamin', 'subkat', 'klaster_kode',  'klaster_nama']
