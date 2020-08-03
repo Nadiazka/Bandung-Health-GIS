@@ -84,7 +84,10 @@ for (var i = 0; i < chartPenyakit.length; i++) {
     if (chartPenyakit[i].icd_10__nama_subkat != null && chartPenyakit[i].icd_10__nama_subkat != undefined){
     	chartPenyakitLabel[i] = chartPenyakit[i].icd_10__nama_subkat;
     }
-    else{chartPenyakitLabel[i] = chartPenyakit[i].kat__nama_kat}
+    else if (chartPenyakit[i].kat__nama_kat != null && chartPenyakit[i].kat__nama_kat != undefined){
+    	chartPenyakitLabel[i] = chartPenyakit[i].kat__nama_kat
+    }
+    else{chartPenyakitLabel[i] = chartPenyakit[i].chapter__nama_chapter}
     ;
     chartPenyakitData[i]=chartPenyakit[i].kasus
   };
