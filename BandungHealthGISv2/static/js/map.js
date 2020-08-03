@@ -158,10 +158,10 @@ function highlightFeatureKec(e) {
     }
 
   var out = [];
-out.push("Kecamatan : "+layer.feature.properties.Name);
-out.push("Jumlah kasus : "+ dataKecamatan[layer.feature.properties.kode_kode].kasus + " kasus");
-layer.bindPopup(out.join("<br />"));
-layer.on('mouseover', function (e) {
+  out.push("Kecamatan : "+layer.feature.properties.Name);
+  out.push("Jumlah kasus : "+ dataKecamatan[layer.feature.properties.kode_kode].kasus + " kasus");
+  layer.bindPopup(out.join("<br />"));
+  layer.on('mouseover', function (e) {
       this.openPopup();
       });
   layer.on('mouseout', function (e) {
@@ -242,6 +242,9 @@ if (qsClustering[0] != null && qsClustering[0] != undefined ){
   function highlightFeatureClstr1(e) {
     console.log("Masuk highlightFeatureClstr1")
     var layer = e.target;
+    if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+      layer.bringToFront();
+    }
     var out = [];
     //out.push("Kecamatan : "+qsClustering[0].klaster_nama);
     //out.push("Derajat Signifikansi : "+ qsClustering[0].llr);

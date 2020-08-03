@@ -197,9 +197,11 @@ var myChart2 = new Chart(ctx, {
 var ctx = document.getElementById("ChartPeriode").getContext('2d');
 chartPeriodeLabel = [];
 chartPeriodeData = [];
-for (var i = chartPeriode.length; i <0 ; i--) {
-    chartPeriodeLabel[i] = chartPeriode[i].kode__tanggal;
-    chartPeriodeData[i]=chartPeriode[i].kasus
+for (var i =0 ; i <chartPeriode.length ; i++) {
+	j=chartPeriode.length
+    chartPeriodeLabel[i] = chartPeriode[j].kode__tanggal;
+    chartPeriodeData[i]=chartPeriode[j].kasus
+    j--
   };
 var myChart2 = new Chart(ctx, {
 	type: 'line',
