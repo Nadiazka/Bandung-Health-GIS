@@ -221,17 +221,14 @@ var Clustering3 = L.layerGroup();
 if (qsClustering[0] != null && qsClustering[0] != undefined ){
   var strClust1 = qsClustering[0].klaster_kode
   var dataClust1 = strClust1.split(", ")
-  var strNamaClust1 = qsClustering[0].klaster_nama
-  var namaClust1 = strNamaClust1.split(", ")
 
   function highlightFeatureClstr1(e) {
-    console.log("Masuk highlightFeatureClstr1")
     var layer = e.target;
     if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
               layer.bringToFront();
             }
     var out = [];
-    out.push("Kecamatan : "+namaClust1[i]);
+    out.push("Kecamatan : "+layer.feature.properties.Name);
     out.push("Penyakit : "+qsClustering[0].subkat__nama_subkat);
     out.push("Jenis Kelamin : "+qsClustering[0].jenis_kelamin);
     out.push("Tanggal : "+qsClustering[0].tanggal);
@@ -251,7 +248,6 @@ if (qsClustering[0] != null && qsClustering[0] != undefined ){
         mouseover: highlightFeatureClstr1,
         click: zoomToFeature
     });
-    layer.bindPopup("Kecamatan : "+namaClust1[i])
   }
 
   $.getJSON(URLkec,function(data){
@@ -274,8 +270,6 @@ if (qsClustering[0] != null && qsClustering[0] != undefined ){
 if (qsClustering[1] != null && qsClustering[1] != undefined ){
   var strClust2 = qsClustering[1].klaster_kode
   var dataClust2 = strClust2.split(", ")
-  var strNamaClust2 = qsClustering[1].klaster_nama
-  var namaClust2 = strNamaClust2.split(", ")
 
   function highlightFeatureClstr2(e) {
     console.log("Masuk highlightFeatureClstr1")
@@ -284,7 +278,7 @@ if (qsClustering[1] != null && qsClustering[1] != undefined ){
               layer.bringToFront();
             }
     var out = [];
-    out.push("Kecamatan : "+namaClust2[i]);
+    out.push("Kecamatan : "+layer.feature.properties.Name);
     out.push("Penyakit : "+qsClustering[1].subkat__nama_subkat);
     out.push("Jenis Kelamin : "+qsClustering[1].jenis_kelamin);
     out.push("Tanggal : "+qsClustering[1].tanggal);
@@ -326,8 +320,6 @@ if (qsClustering[1] != null && qsClustering[1] != undefined ){
 if (qsClustering[2] != null && qsClustering[2] != undefined ){
   var strClust3 = qsClustering[2].klaster_kode
   var dataClust3 = strClust3.split(", ")
-  var strNamaClust3 = qsClustering[2].klaster_nama
-  var namaClust3 = strNamaClust3.split(", ")
 
   function highlightFeatureClstr3(e) {
     console.log("Masuk highlightFeatureClstr1")
@@ -336,7 +328,7 @@ if (qsClustering[2] != null && qsClustering[2] != undefined ){
               layer.bringToFront();
             }
     var out = [];
-    out.push("Kecamatan : "+namaClust3[i]);
+    out.push("Kecamatan : "+layer.feature.properties.Name);
     out.push("Penyakit : "+qsClustering[2].subkat__nama_subkat);
     out.push("Jenis Kelamin : "+qsClustering[2].jenis_kelamin);
     out.push("Tanggal : "+qsClustering[2].tanggal);
