@@ -219,47 +219,15 @@ var Clustering2 = L.layerGroup();
 var Clustering3 = L.layerGroup();
 
 if (qsClustering[0] != null && qsClustering[0] != undefined ){
-  var x = [{
-    jenis_kelamin: "semua jenis",
-    klaster_kode: "3273160, 3273070, 3273150, 3273170",
-    klaster_nama: "BATUNUNGGAL, LENGKONG, KIARACONDONG, SUMUR BANDUNG",
-    llr: 21,
-    subkat: "A01.0",
-    subkat__nama_subkat: "Demam Tifoid",
-    tanggal: "2019-11-01",
-  }
-  ]
-  var strX = x[0].klaster_kode
-  var dataX = strX.split(", ")
-  console.log(dataX)
-
-  var strNama = x[0].klaster_nama
-  var nama = strNama.split(", ")
-  console.log(nama)
-  var dataClustering1 = [qsClustering[0].klaster_kode]
-  console.log(dataClustering1)
-
+  var strClust1 = qsClustering[0].klaster_kode
+  var dataClust1 = strClust1.split(", ")
+  var strNamaClust1 = qsClustering[0].klaster_nama
+  var namaClust1 = strNamaClust1.split(", ")
+/*
   function highlightFeatureClstr1(e) {
     console.log("Masuk highlightFeatureClstr1")
     var layer = e.target;
-    if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
-      layer.bringToFront();
-    }
-    var out = [];
-    //out.push("Kecamatan : "+qsClustering[0].klaster_nama);
-    //out.push("Derajat Signifikansi : "+ qsClustering[0].llr);
-    out.push("Kecamatan : "+nama[0]);
-    out.push("Penyakit : "+x[0].subkat__nama_subkat);
-    out.push("Jenis Kelamin : "+x[0].jenis_kelamin);
-    out.push("Tanggal : "+x[0].tanggal);
-    out.push("Derajat Signifikansi : "+ x[0].llr);
-    layer.bindPopup(out.join("<br />"));
-    layer.on('mouseover', function (e) {
-          this.openPopup();
-          });
-    layer.on('mouseout', function (e) {
-        this.closePopup();
-    });
+    
     }
 
   function onEachFeatureClstr1(feature, layer) {
@@ -269,21 +237,35 @@ if (qsClustering[0] != null && qsClustering[0] != undefined ){
         click: zoomToFeature
     });
   }
-  
+  */
   $.getJSON(URLkec,function(data){
       console.log(data);
-      //for (var i = 0; i < dataClustering1.length; i++) {
-      for (var i = 0; i < dataX.length; i++) {
+      for (var i = 0; i < dataClustering1.length; i++) {
         L.geoJson(data, {
           filter : function (feature){
-            //if (feature.properties.kode_kode=== dataClustering1[i]) return true
-            if (feature.properties.kode_kode=== dataX[i]) return true;
+            if (feature.properties.kode_kode=== dataClust1[i]) return true;
           },
           style : function(feature){
-            //if (feature.properties.kode_kode=== dataClustering1[i]) return {color: "#1e0505"};
-            if (feature.properties.kode_kode=== dataX[i]) return {color: "#1e0505"};
+            if (feature.properties.kode_kode=== dataClust1[i]) return {color: "#1e0505"};
           },
-          onEachFeature: onEachFeatureClstr1
+          onEachFeature: function(layer){
+            if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+              layer.bringToFront();
+            }
+            var out = [];
+            out.push("Kecamatan : "+namaClust1[i]);
+            out.push("Penyakit : "+qsClustering[0].subkat__nama_subkat);
+            out.push("Jenis Kelamin : "+qsClustering[0].jenis_kelamin);
+            out.push("Tanggal : "+qsClustering[0].tanggal);
+            out.push("Derajat Signifikansi : "+ qsClustering[0].llr);
+            layer.bindPopup(out.join("<br />"));
+            layer.on('mouseover', function (e) {
+                  this.openPopup();
+                  });
+            layer.on('mouseout', function (e) {
+                this.closePopup();
+            });
+          }
         }).addTo(Clustering1);
       }
       console.log("clustering aman")
