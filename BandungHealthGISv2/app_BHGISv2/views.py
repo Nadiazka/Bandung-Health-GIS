@@ -305,6 +305,21 @@ def index(request):
 
 			elif penyakit_query == "Semua Penyakit":
 				qs = Jumlah_Chapter.objects.select_related('kode__kode_pkm')
+				qsClustering = Klaster_Penyakit.objects\
+				.filter(
+					tanggal__gte=dateStart_query,
+					tanggal__lt=dateEnd_query,
+					jenis_kelamin=gender_query
+					)\
+				.order_by('-llr')[:3]\
+				.values(
+					'subkat',
+					'subkat__nama_subkat',
+					'jenis_kelamin',
+					'tanggal',
+					'klaster_kode',
+					'klaster_nama',
+					'llr')
 				
 			if gender_query != "Semua Jenis":
 				qs = qs.filter(kat_pasien__jenis_kelamin__iexact=gender_query)
