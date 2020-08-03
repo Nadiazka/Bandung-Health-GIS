@@ -240,7 +240,7 @@ if (qsClustering[0] != null && qsClustering[0] != undefined ){
   */
   $.getJSON(URLkec,function(data){
       console.log(data);
-      for (var i = 0; i < dataClustering1.length; i++) {
+      for (var i = 0; i < dataClust1.length; i++) {
         L.geoJson(data, {
           filter : function (feature){
             if (feature.properties.kode_kode=== dataClust1[i]) return true;
