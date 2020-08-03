@@ -2,9 +2,6 @@ from django.db.models import Q, F, Sum, Avg, Max, Min, Count
 from itertools import chain
 from django.http import JsonResponse
 from rest_framework import generics, viewsets, status, mixins
-from rest_framework.filters import SearchFilter, OrderingFilter
-from rest_framework.response import Response
-from rest_framework.views import APIView
 from rest_framework.pagination import PageNumberPagination
 from django_filters.rest_framework import DjangoFilterBackend
 from django.shortcuts import render, redirect
@@ -347,25 +344,25 @@ def index(request):
 		
 			if penyakit_query == "Semua Penyakit":
 				if jenisKasus_query == "Kasus Baru":
-					qsChartPenyakit = qs.values('chapter__nama_chapter').annotate(kasus = Sum('kasus_baru')).order_by('kasus')[:10]
+					qsChartPenyakit = qs.values('chapter__nama_chapter').annotate(kasus = Sum('kasus_baru')).order_by('-kasus')[:10]
 				elif jenisKasus_query=="Kasus Lama":
-					qsChartPenyakit = qs.values('chapter__nama_chapter').annotate(kasus = Sum('kasus_lama')).order_by('kasus')[:10]
+					qsChartPenyakit = qs.values('chapter__nama_chapter').annotate(kasus = Sum('kasus_lama')).order_by('-kasus')[:10]
 				elif jenisKasus_query=="Semua Jenis":
-					qsChartPenyakit = qs.values('chapter__nama_chapter').annotate(kasus=Sum('jumlah')).order_by('kasus')[:10]
+					qsChartPenyakit = qs.values('chapter__nama_chapter').annotate(kasus=Sum('jumlah')).order_by('-kasus')[:10]
 			elif "." in kodePenyakit:
 				if jenisKasus_query == "Kasus Baru":
-					qsChartPenyakit = qs.values('icd_10__nama_subkat').annotate(kasus = Sum('kasus_baru')).order_by('kasus')[:10]
+					qsChartPenyakit = qs.values('icd_10__nama_subkat').annotate(kasus = Sum('kasus_baru')).order_by('-kasus')[:10]
 				elif jenisKasus_query=="Kasus Lama":
-					qsChartPenyakit = qs.values('icd_10__nama_subkat').annotate(kasus = Sum('kasus_lama')).order_by('kasus')[:10]
+					qsChartPenyakit = qs.values('icd_10__nama_subkat').annotate(kasus = Sum('kasus_lama')).order_by('-kasus')[:10]
 				elif jenisKasus_query=="Semua Jenis":
-					qsChartPenyakit = qs.values('icd_10__nama_subkat').annotate(kasus=Sum('jumlah')).order_by('kasus')[:10]
+					qsChartPenyakit = qs.values('icd_10__nama_subkat').annotate(kasus=Sum('jumlah')).order_by('-kasus')[:10]
 			else:
 				if jenisKasus_query == "Kasus Baru":
-					qsChartPenyakit = qs.values('kat__nama_kat').annotate(kasus = Sum('kasus_baru')).order_by('kasus')[:10]
+					qsChartPenyakit = qs.values('kat__nama_kat').annotate(kasus = Sum('kasus_baru')).order_by('-kasus')[:10]
 				elif jenisKasus_query=="Kasus Lama":
-					qsChartPenyakit = qs.values('kat__nama_kat').annotate(kasus = Sum('kasus_lama')).order_by('kasus')[:10]
+					qsChartPenyakit = qs.values('kat__nama_kat').annotate(kasus = Sum('kasus_lama')).order_by('-kasus')[:10]
 				elif jenisKasus_query=="Semua Jenis":
-					qsChartPenyakit = qs.values('kat__nama_kat').annotate(kasus=Sum('jumlah')).order_by('kasus')[:10]
+					qsChartPenyakit = qs.values('kat__nama_kat').annotate(kasus=Sum('jumlah')).order_by('-kasus')[:10]
 		else :
 			#Tampilan Default
 			#Get last date in database
@@ -484,5 +481,5 @@ class ClusteringAPI(generics.ListCreateAPIView):
 	queryset = Klaster_Penyakit.objects.filter(tanggal=tgl)\
 	.values('tanggal', 'jenis_kelamin','subkat', 'klaster_kode', 'klaster_nama')
 	serializer_class = ClusteringSerializer
-	filter_backends = [SearchFilter]
-	search_fields = ['subkat']
+	filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['subkat']
