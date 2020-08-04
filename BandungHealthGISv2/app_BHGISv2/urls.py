@@ -8,6 +8,5 @@ urlpatterns =[
 	url(r'^PenyakitKat/', views.PenyakitKat.as_view()),
 	url(r'^DataClustering/', views.DataClustering.as_view()),
 	url(r'^Clustering/', views.funcClustering, name='Clustering'),
-	url(r'^Puskesmas/', views.Pkm),
 	url(r'^HasilClustering/', views.ClusteringAPI.as_view()),
 ]
