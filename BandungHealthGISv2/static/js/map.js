@@ -9,7 +9,7 @@ attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStree
 // load GeoJSON from an external file
 URLpkm = "static/data/areaPkm.geojson";
 URLkec = "static/data/areaKec.geojson";
-URLtpkm = "static/data/titikPkm.geojson";
+URLtpkm = "static/data/titikPkmv3.geojson";
 
 /*
 // load GeoJSON from an external file
@@ -196,12 +196,26 @@ $.getJSON(URLkec,function(data){
 });
 
 //Titik Puskesmas
+/*
+detailPkm = "static/data/detailPuskesmas.json";
+addPkm = {};
+$.getJSON(detailPkm, 
+      function(data) { 
+      temp = data.qs
+      for (var i = 0; i < temp.length; i++) {
+        console.log("looping masukk")
+        addPkm[temp[i].kode_pkm] = {"alamat" : temp[i].alamat};
+      };
+      }
+  );
+*/
 var TitikPkm = L.layerGroup();
 $.getJSON(URLtpkm,function(data){
     L.geoJson(data, {
     style: styleKec,
     onEachFeature: function (feature, layer) {
-                   		layer.bindPopup("Puskesmas "+feature.properties.Puskesmas);
+                   		layer.bindPopup(
+                        "Nama Puskesmas : Puskesmas "+feature.properties.Puskesmas+"<br />"+"Alamat :"+feature.properties.alamat);
                    		layer.on('mouseover', function (e) {
 				        this.openPopup();
 					        });

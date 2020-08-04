@@ -505,3 +505,7 @@ class ClusteringAPI(generics.ListAPIView):
 	serializer_class = ClusteringSerializer
 	filter_backends = [DjangoFilterBackend]
 	filterset_fields = ['subkat', 'jenis_kelamin']
+
+def Pkm(request):
+	qs = Puskesmas.objects.values('kode_pkm','alamat')
+	return JsonResponse({'qs':list(qs)})
