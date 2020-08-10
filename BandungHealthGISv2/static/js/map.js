@@ -212,7 +212,6 @@ $.getJSON(detailPkm,
 var TitikPkm = L.layerGroup();
 $.getJSON(URLtpkm,function(data){
     L.geoJson(data, {
-    style: styleKec,
     onEachFeature: function (feature, layer) {
                    		layer.bindPopup(
                         "Nama Puskesmas : Puskesmas "+feature.properties.Puskesmas+"<br />"+"Alamat :"+feature.properties.alamat);

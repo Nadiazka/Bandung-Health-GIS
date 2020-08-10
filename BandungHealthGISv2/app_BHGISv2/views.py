@@ -336,48 +336,25 @@ def index(request):
 
 			#Filter Jenis Kasus
 			if jenisKasus_query=="Kasus Baru":
-				qsPkm = qs.values('kode__kode_pkm', 'kode__kode_pkm__nama_pkm').annotate(kasus = Sum('kasus_baru'))
-				qsKec = qs.values('kode__kode_pkm__kode_kec', 'kode__kode_pkm__kode_kec__nama_kec').annotate(kasus = Sum('kasus_baru'))
-				qsChartUmur = qs.values('kat_pasien__umur').annotate(kasus = Sum('kasus_baru')).order_by('-kasus')[:10]
-				qsChartGender =qs.values('kat_pasien__jenis_kelamin').annotate(kasus = Sum('kasus_baru'))
-				qsChartDate =qs.values('kode__tanggal').annotate(kasus = Sum('kasus_baru')).order_by('-kode__tanggal')[:10]
-				qsChartKasus = qs.aggregate(Kasus_Baru=Sum('kasus_baru'))
+				kasusStatus = 'kasus_baru'
 			elif jenisKasus_query=="Kasus Lama":
-				qsPkm = qs.values('kode__kode_pkm', 'kode__kode_pkm__nama_pkm').annotate(kasus = Sum('kasus_lama'))
-				qsKec = qs.values('kode__kode_pkm__kode_kec', 'kode__kode_pkm__kode_kec__nama_kec').annotate(kasus = Sum('kasus_lama'))
-				qsChartUmur = qs.values('kat_pasien__umur').annotate(kasus = Sum('kasus_lama')).order_by('-kasus')[:10]
-				qsChartGender =qs.values('kat_pasien__jenis_kelamin').annotate(kasus = Sum('kasus_lama'))
-				qsChartDate =qs.values('kode__tanggal').annotate(kasus = Sum('kasus_lama')).order_by('-kode__tanggal')[:10]
-				qsChartKasus = qs.aggregate(Kasus_Lama=Sum('kasus_lama'))
-			elif jenisKasus_query=="Semua Jenis":
-				qsPkm = qs.values('kode__kode_pkm', 'kode__kode_pkm__nama_pkm').annotate(kasus=Sum('jumlah'))
-				qsKec = qs.values('kode__kode_pkm__kode_kec', 'kode__kode_pkm__kode_kec__nama_kec').annotate(kasus=Sum('jumlah'))
-				qsChartUmur = qs.values('kat_pasien__umur').annotate(kasus=Sum('jumlah')).order_by('-kasus')[:10]
-				qsChartGender =qs.values('kat_pasien__jenis_kelamin').annotate(kasus=Sum('jumlah'))
-				qsChartDate =qs.values('kode__tanggal').annotate(kasus=Sum('jumlah')).order_by('-kode__tanggal')[:10]
-				qsChartKasus = qs.aggregate(Kasus_Baru=Sum('kasus_baru'), Kasus_Lama=Sum('kasus_lama'))
-		
-			if penyakit_query == "Semua Penyakit":
-				if jenisKasus_query == "Kasus Baru":
-					qsChartPenyakit = qs.values('chapter__nama_chapter').annotate(kasus = Sum('kasus_baru')).order_by('-kasus')[:10]
-				elif jenisKasus_query=="Kasus Lama":
-					qsChartPenyakit = qs.values('chapter__nama_chapter').annotate(kasus = Sum('kasus_lama')).order_by('-kasus')[:10]
-				elif jenisKasus_query=="Semua Jenis":
-					qsChartPenyakit = qs.values('chapter__nama_chapter').annotate(kasus=Sum('jumlah')).order_by('-kasus')[:10]
-			elif "." in kodePenyakit:
-				if jenisKasus_query == "Kasus Baru":
-					qsChartPenyakit = qs.values('icd_10__nama_subkat').annotate(kasus = Sum('kasus_baru')).order_by('-kasus')[:10]
-				elif jenisKasus_query=="Kasus Lama":
-					qsChartPenyakit = qs.values('icd_10__nama_subkat').annotate(kasus = Sum('kasus_lama')).order_by('-kasus')[:10]
-				elif jenisKasus_query=="Semua Jenis":
-					qsChartPenyakit = qs.values('icd_10__nama_subkat').annotate(kasus=Sum('jumlah')).order_by('-kasus')[:10]
+				kasusStatus = 'kasus_lama'
 			else:
-				if jenisKasus_query == "Kasus Baru":
-					qsChartPenyakit = qs.values('kat__nama_kat').annotate(kasus = Sum('kasus_baru')).order_by('-kasus')[:10]
-				elif jenisKasus_query=="Kasus Lama":
-					qsChartPenyakit = qs.values('kat__nama_kat').annotate(kasus = Sum('kasus_lama')).order_by('-kasus')[:10]
-				elif jenisKasus_query=="Semua Jenis":
-					qsChartPenyakit = qs.values('kat__nama_kat').annotate(kasus=Sum('jumlah')).order_by('-kasus')[:10]
+				kasusStatus = 'jumlah'
+
+			qsPkm = qs.values('kode__kode_pkm', 'kode__kode_pkm__nama_pkm').annotate(kasus = Sum(kasusStatus))
+			qsKec = qs.values('kode__kode_pkm__kode_kec', 'kode__kode_pkm__kode_kec__nama_kec').annotate(kasus = Sum(kasusStatus))
+			qsChartUmur = qs.values('kat_pasien__umur').annotate(kasus = Sum(kasusStatus)).order_by('-kasus')[:10]
+			qsChartGender =qs.values('kat_pasien__jenis_kelamin').annotate(kasus = Sum(kasusStatus))
+			qsChartDate =qs.values('kode__tanggal').annotate(kasus = Sum(kasusStatus)).order_by('-kode__tanggal')[:10]
+			qsChartKasus = qs.aggregate(Kasus_Baru=Sum(kasusStatus))
+			if penyakit_query == "Semua Penyakit":
+				qsChartPenyakit = qs.values('chapter__nama_chapter').annotate(kasus = Sum(kasusStatus)).order_by('-kasus')[:10]
+			elif "." in kodePenyakit:
+				qsChartPenyakit = qs.values('icd_10__nama_subkat').annotate(kasus = Sum(kasusStatus)).order_by('-kasus')[:10]
+			else:
+				qsChartPenyakit = qs.values('kat__nama_kat').annotate(kasus = Sum(kasusStatus)).order_by('-kasus')[:10]
+			
 		else :
 			#Tampilan Default
 			#Get last date in database
@@ -447,6 +424,26 @@ def index(request):
 	return render (request, 'app_BHGIS/indexV2.html')
 
 def funcClustering(tgl):
+	tanggal = Indeks.objects.values('tanggal').order_by('tanggal')[0]['tanggal']
+	qsLooping = Jumlah_Kasus_Subkat.objects.select_related('kode__kode_pkm')\
+		.filter(kode__tanggal=tanggal)\
+		.values('kode__tanggal', 'kode__kode_pkm__kode_kec', 'icd_10')\
+		.annotate(
+			baru_l=Sum('jumlah_baru_l'),
+			baru_p=Sum('jumlah_baru_p'), 
+			lama_l=Sum('jumlah_lama_l'), 
+			lama_p=Sum('jumlah_lama_p'), 
+			baru=Sum(F('jumlah_baru_l')+F('jumlah_baru_p')), 
+			lama=Sum(F('jumlah_lama_l')+F('jumlah_lama_p')), 
+			l=Sum(F('jumlah_baru_l')+F('jumlah_lama_l')), 
+			p=Sum(F('jumlah_baru_p')+F('jumlah_lama_p')), 
+			jumlah=Sum('jumlah'))
+	data ={
+		'qsHasil' : list(qsLooping)
+	}
+	return JsonResponse(data)
+
+def funcHasilClustering(request):
 	#urlOutput = requests.get('https://djatianwar.shinyapps.io/disease-clustering/')
 	#dataOutput = urlOutput.json()
 	dataOutput ={}
@@ -468,24 +465,7 @@ def funcClustering(tgl):
 					rank = data.rank,
 					p_value = data.p_value
 					)
-	tanggal = Indeks.objects.values('tanggal').order_by('tanggal')[0]['tanggal']
-	qsLooping = Jumlah_Kasus_Subkat.objects.select_related('kode__kode_pkm')\
-		.filter(kode__tanggal=tanggal)\
-		.values('kode__tanggal', 'kode__kode_pkm__kode_kec', 'icd_10')\
-		.annotate(
-			baru_l=Sum('jumlah_baru_l'),
-			baru_p=Sum('jumlah_baru_p'), 
-			lama_l=Sum('jumlah_lama_l'), 
-			lama_p=Sum('jumlah_lama_p'), 
-			baru=Sum(F('jumlah_baru_l')+F('jumlah_baru_p')), 
-			lama=Sum(F('jumlah_lama_l')+F('jumlah_lama_p')), 
-			l=Sum(F('jumlah_baru_l')+F('jumlah_lama_l')), 
-			p=Sum(F('jumlah_baru_p')+F('jumlah_lama_p')), 
-			jumlah=Sum('jumlah'))
-	data ={
-		'qsHasil' : list(qsLooping)
-	}
-	return JsonResponse(data)
+	return "oke"
 
 class DataClustering(generics.ListAPIView):
 	queryset = Kecamatan.objects.all()
