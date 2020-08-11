@@ -184,7 +184,6 @@ function getColorKec(d) {
               d > Math.round(0.4*(statKec.kasus__max-statKec.kasus__min))  ? '#FC4E2A' :
               d > Math.round(0.2*(statKec.kasus__max-statKec.kasus__min))  ? '#FD8D3C' :
               d > statKec.kasus__min  ? '#FEB24C' :
-              d >= 0  ? '#FFEDA0':
                        '#BCADA9';
   }
 

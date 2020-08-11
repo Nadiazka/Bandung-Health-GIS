@@ -17,6 +17,7 @@ def registerPage(request):
 		form = CreateUserForm(request.POST)
 		profile_form = ProfileForm(request.POST)
 		if form.is_valid() and profile_form.is_valid():
+			print("Form Valid")
 			user = form.save()
 			profile = profile_form.save(commit=False)
 			profile.user = user
@@ -24,9 +25,12 @@ def registerPage(request):
 			username = form.cleaned_data.get('username')
 			messages.success(request, 'Selamat '+ username +', akun kamu berhasil dibuat')
 			return redirect('login')
+		else:
+			print("Form tidak valid")
 	else:
 		form = CreateUserForm()
 		profile_form = ProfileForm()
+		print("tidak ada request POST")
 
 	context = {
 	'form' : form, 
