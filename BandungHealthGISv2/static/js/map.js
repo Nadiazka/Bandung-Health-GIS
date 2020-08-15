@@ -102,8 +102,8 @@ function getColorPkm(d) {
               d > Math.round(0.6*(statPkm.kasus__max-statPkm.kasus__min))  ? '#E31A1C' :
               d > Math.round(0.4*(statPkm.kasus__max-statPkm.kasus__min))  ? '#FC4E2A' :
               d > Math.round(0.2*(statPkm.kasus__max-statPkm.kasus__min))  ? '#FD8D3C' :
-              d > statKec.kasus__min  ? '#FEB24C' :
-                       '#BCADA9';
+              d > statPkm.kasus__min  ? '#FEB24C' :
+              '#BCADA9';
   }
 
 $.getJSON(URLpkm,function(data){
@@ -424,17 +424,16 @@ if (qsClustering[2] != null && qsClustering[2] != undefined ){
             }
 	          var div = L.DomUtil.create('div', 'info legend'),
 	              grades = listGrades,
+                listLabel = ['#FEB24C', '#FD8D3C', '#FC4E2A', '#E31A1C', '#BD0026']
 	              labels = [],
 	              from, to;
-            labels.push('<i style="background:' + getColorPkm(nullGrades) + '"></i> ' +
-                    nullGrades);
+            labels.push('<i style="background:'#BCADA9'"></i> Tidak ada data');
 	          for (var i = 0; i < grades.length; i++) {
 	              from = grades[i];
 	              to = grades[i + 1];
 
 	              labels.push(
-                    '<i style="background:' + getColorPkm(from+1) + '"></i> ' +
-                      (from+1) + (to ? '&ndash;' + to : '+'));
+                    '<i style="background:' + listLabel[i] + '"></i> ' + (from+1) + '&ndash;' + to );
 	          }
 
 	          div.innerHTML = labels.join('<br>');
