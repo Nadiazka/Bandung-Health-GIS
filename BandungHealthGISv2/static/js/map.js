@@ -99,10 +99,10 @@ function onEachFeaturePkm(feature, layer) {
 function getColorPkm(d) {
       return d > statPkm.kasus__max  ? '#800026' :
               d > Math.round(0.8*(statPkm.kasus__max-statPkm.kasus__min)) ? '#BD0026' :
-              d > Math.round(0.6*(statPkm.kasus__max-statPkm.kasus__min))  ? '#E31A1C' :
-              d > Math.round(0.4*(statPkm.kasus__max-statPkm.kasus__min))  ? '#FC4E2A' :
-              d > Math.round(0.2*(statPkm.kasus__max-statPkm.kasus__min))  ? '#FD8D3C' :
-              d > (statPkm.kasus__min-1)  ? '#FEB24C' :
+              d > Math.round(0.6*(statPkm.kasus__max-statPkm.kasus__min))  ? '#f03b20' :
+              d > Math.round(0.4*(statPkm.kasus__max-statPkm.kasus__min))  ? '#fd8d3c' :
+              d > Math.round(0.2*(statPkm.kasus__max-statPkm.kasus__min))  ? '#fecc5c' :
+              d > (statPkm.kasus__min-1)  ? '#ffffb2' :
               '#BCADA9';
   }
 
@@ -179,10 +179,10 @@ function onEachFeatureKec(feature, layer) {
 function getColorKec(d) {
       return d > statKec.kasus__max  ? '#800026' :
               d > Math.round(0.8*(statKec.kasus__max-statKec.kasus__min)) ? '#BD0026' :
-              d > Math.round(0.6*(statKec.kasus__max-statKec.kasus__min))  ? '#E31A1C' :
-              d > Math.round(0.4*(statKec.kasus__max-statKec.kasus__min))  ? '#FC4E2A' :
-              d > Math.round(0.2*(statKec.kasus__max-statKec.kasus__min))  ? '#FD8D3C' :
-              d > (statKec.kasus__min-1)  ? '#FEB24C' :
+              d > Math.round(0.6*(statKec.kasus__max-statKec.kasus__min))  ? '#f03b20' :
+              d > Math.round(0.4*(statKec.kasus__max-statKec.kasus__min))  ? '#fd8d3c' :
+              d > Math.round(0.2*(statKec.kasus__max-statKec.kasus__min))  ? '#fecc5c' :
+              d > (statKec.kasus__min-1)  ? '#ffffb2' :
                        '#BCADA9';
   }
 
@@ -407,7 +407,7 @@ if (qsClustering[2] != null && qsClustering[2] != undefined ){
 	      legendPkm.onAdd = function (map) {
           nullGrades = "tidak ada data";
           listGrades=[];
-          listLabel = ['#FEB24C', '#FD8D3C', '#FC4E2A', '#E31A1C', '#BD0026'];
+          listLabel = ['#ffffb2', '#fecc5c', '#fd8d3c', '#f03b20', '#bd0026'];
           range = statPkm.kasus__max-statPkm.kasus__min;
           if ( range>=5){
             listGrades.push((statPkm.kasus__min-1),
@@ -445,7 +445,7 @@ if (qsClustering[2] != null && qsClustering[2] != undefined ){
       legendKec.onAdd = function (map) {
           nullGrades = "tidak ada data";
           listGrades=[];
-          listLabel = ['#FEB24C', '#FD8D3C', '#FC4E2A', '#E31A1C', '#BD0026'];
+          listLabel = ['#ffffb2', '#fecc5c', '#fd8d3c', '#f03b20', '#bd0026'];
           range = statKec.kasus__max-statKec.kasus__min;
           if ( range>=5){
             listGrades.push((statKec.kasus__min-1),
