@@ -337,17 +337,19 @@ def index(request):
 			#Filter Jenis Kasus
 			if jenisKasus_query=="Kasus Baru":
 				kasusStatus = 'kasus_baru'
+				qsChartKasus = qs.aggregate(Kasus_Baru=Sum(kasusStatus))
 			elif jenisKasus_query=="Kasus Lama":
 				kasusStatus = 'kasus_lama'
+				qsChartKasus = qs.aggregate(Kasus_Lama=Sum(kasusStatus))
 			else:
 				kasusStatus = 'jumlah'
+				qsChartKasus = qs.aggregate(Kasus_Baru=Sum('kasus_baru'), Kasus_Lama=Sum('kasus_lama'))
 
 			qsPkm = qs.values('kode__kode_pkm', 'kode__kode_pkm__nama_pkm').annotate(kasus = Sum(kasusStatus))
 			qsKec = qs.values('kode__kode_pkm__kode_kec', 'kode__kode_pkm__kode_kec__nama_kec').annotate(kasus = Sum(kasusStatus))
 			qsChartUmur = qs.values('kat_pasien__umur').annotate(kasus = Sum(kasusStatus)).order_by('-kasus')[:10]
 			qsChartGender =qs.values('kat_pasien__jenis_kelamin').annotate(kasus = Sum(kasusStatus))
 			qsChartDate =qs.values('kode__tanggal').annotate(kasus = Sum(kasusStatus)).order_by('-kode__tanggal')[:10]
-			qsChartKasus = qs.aggregate(Kasus_Baru=Sum(kasusStatus))
 			if penyakit_query == "Semua Penyakit":
 				qsChartPenyakit = qs.values('chapter__nama_chapter').annotate(kasus = Sum(kasusStatus)).order_by('-kasus')[:10]
 			elif "." in kodePenyakit:
