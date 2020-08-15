@@ -424,7 +424,7 @@ if (qsClustering[2] != null && qsClustering[2] != undefined ){
             }
 	          var div = L.DomUtil.create('div', 'info legend'),
 	              grades = listGrades,
-                listLabel = [#FEB24C, #FD8D3C, #FC4E2A, #E31A1C, #BD0026]
+                listLabel = ['#FEB24C', '#FD8D3C', '#FC4E2A', '#E31A1C', '#BD0026']
 	              labels = [],
 	              from, to;
             labels.push('<i style="background:#BCADA9"></i> Tidak ada data');
