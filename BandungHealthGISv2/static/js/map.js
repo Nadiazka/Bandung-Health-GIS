@@ -102,7 +102,7 @@ function getColorPkm(d) {
               d > Math.round(0.6*(statPkm.kasus__max-statPkm.kasus__min))  ? '#E31A1C' :
               d > Math.round(0.4*(statPkm.kasus__max-statPkm.kasus__min))  ? '#FC4E2A' :
               d > Math.round(0.2*(statPkm.kasus__max-statPkm.kasus__min))  ? '#FD8D3C' :
-              d > statPkm.kasus__min  ? '#FEB24C' :
+              d > (statPkm.kasus__min-1)  ? '#FEB24C' :
               '#BCADA9';
   }
 
@@ -182,8 +182,7 @@ function getColorKec(d) {
               d > Math.round(0.6*(statKec.kasus__max-statKec.kasus__min))  ? '#E31A1C' :
               d > Math.round(0.4*(statKec.kasus__max-statKec.kasus__min))  ? '#FC4E2A' :
               d > Math.round(0.2*(statKec.kasus__max-statKec.kasus__min))  ? '#FD8D3C' :
-              d > statKec.kasus__min  ? '#FEB24C' :
-              d >= 0  ? '#FFEDA0':
+              d > (statKec.kasus__min-1)  ? '#FEB24C' :
                        '#BCADA9';
   }
 
@@ -411,7 +410,7 @@ if (qsClustering[2] != null && qsClustering[2] != undefined ){
           listLabel = ['#FEB24C', '#FD8D3C', '#FC4E2A', '#E31A1C', '#BD0026'];
           range = statPkm.kasus__max-statPkm.kasus__min;
           if ( range>=5){
-            listGrades.push(statPkm.kasus__min,
+            listGrades.push((statPkm.kasus__min-1),
                 Math.round(0.2*(statPkm.kasus__max-statPkm.kasus__min)),
                 Math.round(0.4*(statPkm.kasus__max-statPkm.kasus__min)),
                 Math.round(0.6*(statPkm.kasus__max-statPkm.kasus__min)),
