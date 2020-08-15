@@ -427,12 +427,11 @@ if (qsClustering[2] != null && qsClustering[2] != undefined ){
 	              labels = [],
 	              from, to;
             labels.push('<i style="background:#BCADA9"></i> Tidak ada data');
-	          for (var i = 0; i < grades.length; i++) {
+	          for (var i = 0; i < (grades.length-1); i++) {
 	              from = grades[i];
 	              to = grades[i + 1];
 
-	              labels.push(
-                    '<i style="background:' + listLabel[i] + '"></i> ' + (from+1) + '&ndash;' + to );
+	              labels.push('<i style="background:' + listLabel[i] + '"></i> ' + (from+1) + '&ndash;' + to );
 	          }
 
 	          div.innerHTML = labels.join('<br>');
@@ -445,10 +444,11 @@ if (qsClustering[2] != null && qsClustering[2] != undefined ){
 
       legendKec.onAdd = function (map) {
           nullGrades = "tidak ada data";
-          listGrades=[-1];
+          listGrades=[];
+          listLabel = ['#FEB24C', '#FD8D3C', '#FC4E2A', '#E31A1C', '#BD0026'];
           range = statKec.kasus__max-statKec.kasus__min;
           if ( range>=5){
-            listGrades.push(statKec.kasus__min,
+            listGrades.push((statKec.kasus__min-1),
                 Math.round(0.2*(statKec.kasus__max-statKec.kasus__min)),
                 Math.round(0.4*(statKec.kasus__max-statKec.kasus__min)),
                 Math.round(0.6*(statKec.kasus__max-statKec.kasus__min)),
@@ -464,15 +464,12 @@ if (qsClustering[2] != null && qsClustering[2] != undefined ){
                 grades = listGrades,
                 labels = [],
                 from, to;
-            labels.push('<i style="background:' + getColorKec(nullGrades) + '"></i> ' +
-                    nullGrades);
-            for (var i = 0; i < grades.length; i++) {
+            labels.push('<i style="background:#BCADA9"></i> Tidak ada data');
+            for (var i = 0; i < (grades.length-1); i++) {
                 from = grades[i];
                 to = grades[i + 1];
 
-                labels.push(
-                    '<i style="background:' + getColorKec(from+1) + '"></i> ' +
-                      (from+1) + (to ? '&ndash;' + to : '+'));
+                labels.push('<i style="background:' + listLabel[i] + '"></i> ' + (from+1) + '&ndash;' + to );
             }
 
             div.innerHTML = labels.join('<br>');
