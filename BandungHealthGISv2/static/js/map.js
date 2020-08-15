@@ -102,8 +102,7 @@ function getColorPkm(d) {
               d > Math.round(0.6*(statPkm.kasus__max-statPkm.kasus__min))  ? '#E31A1C' :
               d > Math.round(0.4*(statPkm.kasus__max-statPkm.kasus__min))  ? '#FC4E2A' :
               d > Math.round(0.2*(statPkm.kasus__max-statPkm.kasus__min))  ? '#FD8D3C' :
-              d > statPkm.kasus__min  ? '#FEB24C' :
-              d >= 0  ? '#FFEDA0':
+              d > statKec.kasus__min  ? '#FEB24C' :
                        '#BCADA9';
   }
 
@@ -184,6 +183,7 @@ function getColorKec(d) {
               d > Math.round(0.4*(statKec.kasus__max-statKec.kasus__min))  ? '#FC4E2A' :
               d > Math.round(0.2*(statKec.kasus__max-statKec.kasus__min))  ? '#FD8D3C' :
               d > statKec.kasus__min  ? '#FEB24C' :
+              d >= 0  ? '#FFEDA0':
                        '#BCADA9';
   }
 
@@ -404,10 +404,10 @@ if (qsClustering[2] != null && qsClustering[2] != undefined ){
 
 	//Legenda
 	  var legendPkm = L.control({position: 'bottomright'});
-
+        console.log("Masuk oke")
 	      legendPkm.onAdd = function (map) {
           nullGrades = "tidak ada data";
-          listGrades=[-1];
+          listGrades=[];
           range = statPkm.kasus__max-statPkm.kasus__min;
           if ( range>=5){
             listGrades.push(statPkm.kasus__min,
