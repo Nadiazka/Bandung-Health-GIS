@@ -29,7 +29,7 @@ def last_day_of_month(date_value):
     return date_value.replace(day = monthrange(date_value.year, date_value.month)[1])
 
 # Create your views here.
-@login_required(login_url='login')
+#@login_required(login_url='login')
 def index(request):
 	print("oke")
 	if request.method == 'POST':
