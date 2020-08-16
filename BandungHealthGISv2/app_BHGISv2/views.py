@@ -21,6 +21,7 @@ import sys
 from collections import OrderedDict
 from calendar import monthrange
 import requests
+from compression_middleware.decorators import compress_page
 
 def is_valid_queryparam(param):
 	return param != '' and param is not None
@@ -30,6 +31,7 @@ def last_day_of_month(date_value):
 
 # Create your views here.
 #@login_required(login_url='login')
+@compress_page
 def index(request):
 	print("oke")
 	if request.method == 'POST':
