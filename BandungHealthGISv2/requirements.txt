@@ -36,7 +36,7 @@ openpyxl==3.0.3
 packaging==20.4
 pluggy==0.13.1
 psycopg2==2.8.5
-py==1.8.1
+py==1.10.0
 pycparser==2.20
 pyexcel==0.6.2
 pyexcel-io==0.5.20
